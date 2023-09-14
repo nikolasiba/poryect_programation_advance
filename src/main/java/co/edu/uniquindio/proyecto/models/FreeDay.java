@@ -21,4 +21,5 @@ public class FreeDay implements Serializable {
 
     @ManyToOne
     private Doctor doctor;
+
 }

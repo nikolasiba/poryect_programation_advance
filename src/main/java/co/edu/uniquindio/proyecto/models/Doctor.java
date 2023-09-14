@@ -13,12 +13,19 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
+
 public class Doctor extends User implements Serializable {
+
     @Enumerated(EnumType.STRING)
     private Specialization specialization;
 
     @OneToMany(mappedBy = "doctor")
-    private List<FreeDay>freeDays;
+    private List<FreeDay>freeDayList;
 
+    @OneToMany(mappedBy = "doctor")
+    private List<Schedule>scheduleList;
+
+    @OneToMany(mappedBy = "doctor")
+    private List<Appointment>appointmentList;
 
 }

@@ -1,8 +1,9 @@
 package co.edu.uniquindio.proyecto.models;
 
+import co.edu.uniquindio.proyecto.models.Enum.City;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ManyToAny;
+
 
 import java.io.Serializable;
 
@@ -15,6 +16,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+
 public class User extends Account implements Serializable {
     @Column(length = 30, nullable = false)
     private String name;
@@ -24,14 +26,14 @@ public class User extends Account implements Serializable {
     private String phone;
 
     /**
-     * como no sirve el varchar en mysql, lob(large object), interpretará esto como un texto
+     * como no sirve el varchar en mysql para textos muy largos, lob(large object), interpretará esto como un texto
      * o podemos usar columnDefinition para hacer que un dato sea el que deseamos
     */
 
-     @Lob
+    @Lob
     @Column(nullable = false)
     private String urlPicture;
 
-    @ManyToOne
+    @Enumerated(EnumType.STRING)
     private City city;
 }

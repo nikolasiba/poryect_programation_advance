@@ -26,14 +26,14 @@ public class Petition implements Serializable {
     @Column(length= 500)
     private String reason;
 
-    @OneToMany(mappedBy = "petition")
-    @ToString.Exclude
-    private List<Message> messages;
+    @Enumerated(EnumType.STRING)
+    private PetitionState petitionState;
 
     @ManyToOne
     private Appointment appointment;
 
-    @Enumerated(EnumType.STRING)
-    private PetitionState petitionState;
+    @OneToMany(mappedBy = "petition")
+    private List<Message>messageList;
+
 
 }

@@ -8,13 +8,15 @@ import java.io.Serializable;
 import java.util.List;
 
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@MappedSuperclass
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity
+
 public class Account implements Serializable {
 
     @Id
@@ -30,6 +32,8 @@ public class Account implements Serializable {
     @Column(length = 10, nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "message")
-    private List<Message> messageList;
+    /**
+    @OneToMany(mappedBy = "account")
+    private List<Message>messageList;
+    */
 }

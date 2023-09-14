@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -34,6 +35,9 @@ public class Appointment implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private AppointmentState appointmentState;
+
+    @OneToMany(mappedBy = "appointment")
+    private List<Petition> petitionList;
 
     @OneToOne(mappedBy = "appointment")
     private Attention attention;

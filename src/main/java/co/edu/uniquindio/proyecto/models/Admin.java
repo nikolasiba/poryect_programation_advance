@@ -9,8 +9,8 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
-
 @ToString(callSuper = true)
+
 public class Admin extends Account implements Serializable {
 
 }

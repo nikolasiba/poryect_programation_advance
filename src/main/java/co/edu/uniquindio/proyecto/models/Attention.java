@@ -30,4 +30,6 @@ public class Attention implements Serializable {
 
     @OneToOne
     private Appointment appointment;
+
+
 }
