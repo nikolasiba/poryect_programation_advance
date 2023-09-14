@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.models;
 
+import co.edu.uniquindio.proyecto.models.Enum.AppointmentState;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,7 +32,11 @@ public class Appointment implements Serializable {
     @ManyToOne
     private Doctor doctor;
 
-
     @Enumerated(EnumType.STRING)
     private AppointmentState appointmentState;
+
+    @OneToOne(mappedBy = "appointment")
+    private Attention attention;
+
+
 }

@@ -1,9 +1,6 @@
 package co.edu.uniquindio.proyecto.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
@@ -19,12 +16,15 @@ public class Attention implements Serializable {
     @Id
     private String code;
 
+    @Lob
     @Column(length = 300)
     private String diagnosis;
 
+    @Lob
     @Column(length = 300)
     private String treatment;
 
+    @Lob
     @Column(length = 300)
     private String medicalNotes;
 

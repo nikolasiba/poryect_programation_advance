@@ -1,5 +1,7 @@
 package co.edu.uniquindio.proyecto.models;
 
+import co.edu.uniquindio.proyecto.models.Enum.BloodType;
+import co.edu.uniquindio.proyecto.models.Enum.Eps;
 import jakarta.persistence.*;
 import lombok.*;
 

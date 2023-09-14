@@ -20,6 +20,7 @@ public class Message implements Serializable {
 
     private LocalDateTime createdDate;
 
+    @Lob
     @Column(length= 500)
     private String message;
 
@@ -31,4 +32,5 @@ public class Message implements Serializable {
 
     @OneToOne
     private Message nextMessage;
+
 }

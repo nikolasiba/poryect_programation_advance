@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.models;
 
+import co.edu.uniquindio.proyecto.models.Enum.PetitionState;
 import jakarta.persistence.*;
 import lombok.*;
 
