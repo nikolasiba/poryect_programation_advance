@@ -18,7 +18,7 @@ public class Appointment implements Serializable {
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String code;
+    private int code;
 
     private LocalDateTime createdDate;
 

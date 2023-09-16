@@ -10,4 +10,8 @@ public interface AppointmentServices {
     void listAppointmentPendientes();
     void atenderCita();
     void listAppointmentDoctor();
+
+
+
+    //Es mejor hacer los servicios por rol
 }

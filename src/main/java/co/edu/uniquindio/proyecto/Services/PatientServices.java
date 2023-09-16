@@ -6,5 +6,8 @@ public interface PatientServices {
     void logout();
     void deleteAcaunt();
     void editProffile();
+    void sendLinkRecuperation();
+    void changePassword();
+
 
 }

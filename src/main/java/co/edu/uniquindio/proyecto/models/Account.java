@@ -7,9 +7,8 @@ import lombok.*;
 import java.io.Serializable;
 import java.util.List;
 
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@MappedSuperclass
-
+@Inheritance(strategy = InheritanceType.JOINED)
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,7 +21,7 @@ public class Account implements Serializable {
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String code;
+    private int code;
 
     @Column(length = 50, nullable = false, unique = true)
     @Email
@@ -32,8 +31,7 @@ public class Account implements Serializable {
     @Column(length = 10, nullable = false)
     private String password;
 
-    /**
     @OneToMany(mappedBy = "account")
     private List<Message>messageList;
-    */
+
 }

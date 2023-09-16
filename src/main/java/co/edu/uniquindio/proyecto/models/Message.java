@@ -24,10 +24,10 @@ public class Message implements Serializable {
     @Lob
     @Column(length= 500)
     private String message;
-    /**
+
     @ManyToOne
     private Account account;
-    */
+
     @ManyToOne
     private Petition petition;
 
