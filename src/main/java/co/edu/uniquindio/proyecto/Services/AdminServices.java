@@ -1,15 +1,19 @@
 package co.edu.uniquindio.proyecto.Services;
 
-public interface AdminServices {
-    String crearMedico(MedicoDTO medico) throws Exception;
+import co.edu.uniquindio.proyecto.Dto.*;
 
-    String actualizarMedico(int codigo, MedicoDTO medico) throws Exception;
+import java.util.List;
+
+public interface AdminServices {
+    String crearMedico(DoctorDTO doctor) throws Exception;
+
+    String actualizarMedico(int codigo, DoctorDTO doctor) throws Exception;
 
     String eliminarMedico(int codigo) throws Exception;
 
-    List<MedicoDTOAdmin> listarMedicos() throws Exception;
+    List<DoctorDTOAdmin> listarMedicos() throws Exception;
 
-    InfoMedicoDTO obtenerMedico(int codigo) throws Exception;
+    InfoDoctorDTO obtenerMedico(int codigo) throws Exception;
 
     List<PQRSDTOAdmin> listarPQRS() throws Exception;
 
@@ -17,5 +21,5 @@ public interface AdminServices {
 
     InfoPQRSDTO verDetallePQRS(int codigo) throws Exception;
 
-    List<CitaDTOAdmin> listarCitas() throws Exception;
+    List<AppointmentDTOAdmin> listarCitas() throws Exception;
 }
