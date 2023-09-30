@@ -5,17 +5,18 @@ import co.edu.uniquindio.proyecto.Dto.*;
 import java.util.List;
 
 public interface AdminServices {
-    String crearMedico(DoctorDTO doctor) throws Exception;
 
-    String actualizarMedico(int codigo, DoctorDTO doctor) throws Exception;
+    String createMedico(DoctorDTO doctor) throws Exception;
 
-    String eliminarMedico(int codigo) throws Exception;
+    String updateMedico(int code, DoctorDTO doctor) throws Exception;
 
-    List<DoctorDTOAdmin> listarMedicos() throws Exception;
+    String deleteMedico(int code) throws Exception;
 
-    InfoDoctorDTO obtenerMedico(int codigo) throws Exception;
+    List<DoctorDTOAdmin> listDoctor() throws Exception;
 
-    List<PQRSDTOAdmin> listarPQRS() throws Exception;
+    InfoDoctorDTO getDoctor(int code) throws Exception;
+
+    List<PQRSDTOAdmin> listPQRS() throws Exception;
 
     String responderPQRS(int codigo) throws Exception;
 

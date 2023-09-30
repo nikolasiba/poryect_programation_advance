@@ -36,4 +36,5 @@ public class User extends Account implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private City city;
+
 }

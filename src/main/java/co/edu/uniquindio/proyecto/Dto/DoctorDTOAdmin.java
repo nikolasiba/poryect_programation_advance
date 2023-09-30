@@ -1,4 +1,13 @@
 package co.edu.uniquindio.proyecto.Dto;
 
-public class DoctorDTOAdmin {
+import co.edu.uniquindio.proyecto.models.Enum.Specialization;
+
+public record DoctorDTOAdmin(
+
+        String id,
+        String name,
+        Specialization specialization,
+        String phone
+
+        ) {
 }
