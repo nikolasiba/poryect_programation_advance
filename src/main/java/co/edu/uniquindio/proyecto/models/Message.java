@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,14 +21,15 @@ public class Message implements Serializable {
 
     private LocalDateTime createdDate;
 
+    @Lob
     @Column(length= 500)
     private String message;
 
     @ManyToOne
-    private Petition petition;
+    private Account account;
 
     @ManyToOne
-    private Account account;
+    private Petition petition;
 
     @OneToOne
     private Message nextMessage;

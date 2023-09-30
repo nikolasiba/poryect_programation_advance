@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
@@ -18,12 +19,16 @@ public class Schedule implements Serializable {
     @Id
     private String code;
 
+    @Column(nullable = false)
     private String day;
 
+    @Column(nullable = false)
     private String initialTime;
 
+    @Column(nullable = false)
     private String finalTime;
 
     @ManyToOne
     private Doctor doctor;
+
 }

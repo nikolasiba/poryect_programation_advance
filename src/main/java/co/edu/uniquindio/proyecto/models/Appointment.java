@@ -1,10 +1,12 @@
 package co.edu.uniquindio.proyecto.models;
 
+import co.edu.uniquindio.proyecto.models.Enum.AppointmentState;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -16,7 +18,7 @@ public class Appointment implements Serializable {
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String code;
+    private int code;
 
     private LocalDateTime createdDate;
 
@@ -31,7 +33,14 @@ public class Appointment implements Serializable {
     @ManyToOne
     private Doctor doctor;
 
-
     @Enumerated(EnumType.STRING)
     private AppointmentState appointmentState;
+
+    @OneToMany(mappedBy = "appointment")
+    private List<Petition> petitionList;
+
+    @OneToOne(mappedBy = "appointment")
+    private Attention attention;
+
+
 }

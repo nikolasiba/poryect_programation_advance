@@ -3,31 +3,35 @@ package co.edu.uniquindio.proyecto.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
+import java.util.List;
 
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true)
+@ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@MappedSuperclass
+
 public class Account implements Serializable {
 
+    @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    private String code;
+    private int code;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 50, nullable = false, unique = true)
     @Email
     private String email;
 
     @NonNull
-    @Column(length = 10)
+    @Column(length = 10, nullable = false)
     private String password;
+
+    @OneToMany(mappedBy = "account")
+    private List<Message>messageList;
 
 }

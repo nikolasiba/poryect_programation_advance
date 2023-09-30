@@ -1,4 +1,4 @@
-package co.edu.uniquindio.proyecto.models;
+package co.edu.uniquindio.proyecto.models.Enum;
 
 public enum Eps {
     SANITAS,

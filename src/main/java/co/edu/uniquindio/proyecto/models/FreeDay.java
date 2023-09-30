@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
@@ -17,8 +18,10 @@ public class FreeDay implements Serializable {
     @Id
     private String code;
 
+    @Column(nullable = false)
     private String day;
 
     @ManyToOne
     private Doctor doctor;
+
 }

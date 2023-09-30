@@ -1,9 +1,11 @@
 package co.edu.uniquindio.proyecto.models;
 
+import co.edu.uniquindio.proyecto.models.Enum.Specialization;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Getter
@@ -11,11 +13,19 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-public class Doctor implements Serializable {
-    @Id
-    private String code;
+
+public class Doctor extends User implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private Specialization specialization;
+
+    @OneToMany(mappedBy = "doctor")
+    private List<FreeDay>freeDayList;
+
+    @OneToMany(mappedBy = "doctor")
+    private List<Schedule>scheduleList;
+
+    @OneToMany(mappedBy = "doctor")
+    private List<Appointment>appointmentList;
 
 }

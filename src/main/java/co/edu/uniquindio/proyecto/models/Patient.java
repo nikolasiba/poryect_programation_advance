@@ -1,10 +1,13 @@
 package co.edu.uniquindio.proyecto.models;
 
+import co.edu.uniquindio.proyecto.models.Enum.BloodType;
+import co.edu.uniquindio.proyecto.models.Enum.Eps;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,9 +25,10 @@ public class Patient extends User implements Serializable {
     @Enumerated(EnumType.STRING)
     private BloodType bloodType;
 
-
     @Enumerated(EnumType.STRING)
     private Eps eps;
 
+    @OneToMany(mappedBy = "patient")
+    private List<Appointment>appointmentList;
 
 }
