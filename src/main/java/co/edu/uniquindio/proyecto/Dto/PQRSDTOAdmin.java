@@ -1,4 +1,13 @@
 package co.edu.uniquindio.proyecto.Dto;
 
-public class PQRSDTOAdmin {
+import java.time.LocalDateTime;
+
+public record PQRSDTOAdmin(
+
+        int code,
+        String state,
+        LocalDateTime appointmentDate,
+        String namePatient
+
+) {
 }

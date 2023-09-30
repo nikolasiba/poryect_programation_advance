@@ -1,2 +1,8 @@
-package co.edu.uniquindio.proyecto.Dto;public class LoginDTO {
+package co.edu.uniquindio.proyecto.Dto;
+
+public record LoginDTO(
+        String password,
+        String emali) {
+
+
 }
