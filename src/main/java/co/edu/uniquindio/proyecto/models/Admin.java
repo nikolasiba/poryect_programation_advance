@@ -1,7 +1,10 @@
 package co.edu.uniquindio.proyecto.models;
 
 import jakarta.persistence.Entity;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 

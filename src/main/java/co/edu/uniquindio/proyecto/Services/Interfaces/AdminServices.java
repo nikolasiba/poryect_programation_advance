@@ -1,4 +1,4 @@
-package co.edu.uniquindio.proyecto.Services;
+package co.edu.uniquindio.proyecto.Services.Interfaces;
 
 import co.edu.uniquindio.proyecto.Dto.*;
 

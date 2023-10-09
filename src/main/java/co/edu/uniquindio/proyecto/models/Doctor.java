@@ -1,7 +1,10 @@
 package co.edu.uniquindio.proyecto.models;
 
 import co.edu.uniquindio.proyecto.models.Enum.Specialization;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.OneToMany;
 import lombok.*;
 
 import java.io.Serializable;

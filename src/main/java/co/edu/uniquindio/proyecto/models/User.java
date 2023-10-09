@@ -4,7 +4,6 @@ import co.edu.uniquindio.proyecto.models.Enum.City;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 import java.io.Serializable;
 
 
@@ -18,7 +17,7 @@ import java.io.Serializable;
 @ToString
 
 public class User extends Account implements Serializable {
-    @Column(length = 30, nullable = false)
+    @Column(length = 30, nullable = false, unique = true)
     private String name;
     @Column(length = 30, nullable = false, unique = true)
     private String id;

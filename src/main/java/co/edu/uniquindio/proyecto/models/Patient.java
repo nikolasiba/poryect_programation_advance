@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -17,8 +17,9 @@ import java.util.List;
 @ToString(callSuper = true)
 public class Patient extends User implements Serializable {
 
-    private LocalDateTime birthday;
+    private LocalDate birthday;
 
+    @Lob
     @Column(length = 200)
     private String allergies;
 

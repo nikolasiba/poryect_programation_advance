@@ -11,8 +11,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 
@@ -23,12 +21,12 @@ public class Account implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int code;
 
-    @Column(length = 50, nullable = false, unique = true)
     @Email
+    @Column(length = 50, nullable = false, unique = true)
     private String email;
 
     @NonNull
-    @Column(length = 10, nullable = false)
+    @Column(length = 10, nullable = false, unique = true)
     private String password;
 
     @OneToMany(mappedBy = "account")

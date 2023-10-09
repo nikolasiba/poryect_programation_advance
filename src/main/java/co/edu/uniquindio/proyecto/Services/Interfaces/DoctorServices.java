@@ -1,12 +1,10 @@
-package co.edu.uniquindio.proyecto.Services;
+package co.edu.uniquindio.proyecto.Services.Interfaces;
 
 import co.edu.uniquindio.proyecto.Dto.AttentionDTO;
 import co.edu.uniquindio.proyecto.Dto.FreeDayDTO;
 import co.edu.uniquindio.proyecto.Dto.ItemAppointmentDTO;
 import co.edu.uniquindio.proyecto.models.Enum.AppointmentState;
-import co.edu.uniquindio.proyecto.models.FreeDay;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface DoctorServices {
@@ -16,7 +14,7 @@ public interface DoctorServices {
 
     //parametro una fecha futura, retornar una respuesta, revisar sí la fecha
     // solicitada existen citas por atender y sí ya cuenta con una.
-    String scheduleDayOff(FreeDayDTO freeDay);
+    String scheduleDayOff(FreeDayDTO freeDayDTO) throws Exception;
 
     //se debe retornar las citas futuras
     List<ItemAppointmentDTO> listFutureAppointment();
