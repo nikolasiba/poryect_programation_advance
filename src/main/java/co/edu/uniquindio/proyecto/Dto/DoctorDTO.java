@@ -1,7 +1,7 @@
 package co.edu.uniquindio.proyecto.Dto;
 
-import co.edu.uniquindio.proyecto.models.Enum.City;
-import co.edu.uniquindio.proyecto.models.Enum.Specialization;
+import co.edu.uniquindio.proyecto.Model.Enum.City;
+import co.edu.uniquindio.proyecto.Model.Enum.Specialization;
 
 public record DoctorDTO(
 

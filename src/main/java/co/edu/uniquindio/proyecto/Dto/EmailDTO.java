@@ -9,11 +9,12 @@ public record EmailDTO(
         @Email
         @NotNull
         String addressee,
-        @Lob
-        @NotNull
-        String bady,
+
         @NotNull
         @Column(length = 300)
-        String affair
+        String affair,
+        @Lob
+        @NotNull
+        String bady
 ) {
 }

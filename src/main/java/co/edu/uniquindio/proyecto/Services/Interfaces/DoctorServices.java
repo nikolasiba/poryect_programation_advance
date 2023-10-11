@@ -3,7 +3,7 @@ package co.edu.uniquindio.proyecto.Services.Interfaces;
 import co.edu.uniquindio.proyecto.Dto.AttentionDTO;
 import co.edu.uniquindio.proyecto.Dto.FreeDayDTO;
 import co.edu.uniquindio.proyecto.Dto.ItemAppointmentDTO;
-import co.edu.uniquindio.proyecto.models.Enum.AppointmentState;
+import co.edu.uniquindio.proyecto.Model.Enum.AppointmentState;
 
 import java.util.List;
 

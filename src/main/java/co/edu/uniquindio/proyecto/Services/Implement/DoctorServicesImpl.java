@@ -3,13 +3,13 @@ package co.edu.uniquindio.proyecto.Services.Implement;
 import co.edu.uniquindio.proyecto.Dto.AttentionDTO;
 import co.edu.uniquindio.proyecto.Dto.FreeDayDTO;
 import co.edu.uniquindio.proyecto.Dto.ItemAppointmentDTO;
-import co.edu.uniquindio.proyecto.Repositorios.AppointmentRepo;
-import co.edu.uniquindio.proyecto.Repositorios.AttentionRepo;
-import co.edu.uniquindio.proyecto.Repositorios.DoctorRepo;
+import co.edu.uniquindio.proyecto.Repository.AppointmentRepo;
+import co.edu.uniquindio.proyecto.Repository.AttentionRepo;
+import co.edu.uniquindio.proyecto.Repository.DoctorRepo;
 import co.edu.uniquindio.proyecto.Services.Interfaces.DoctorServices;
-import co.edu.uniquindio.proyecto.models.Attention;
-import co.edu.uniquindio.proyecto.models.Enum.AppointmentState;
-import co.edu.uniquindio.proyecto.models.FreeDay;
+import co.edu.uniquindio.proyecto.Model.Attention;
+import co.edu.uniquindio.proyecto.Model.Enum.AppointmentState;
+import co.edu.uniquindio.proyecto.Model.FreeDay;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -43,9 +43,6 @@ public class DoctorServicesImpl implements DoctorServices {
     public String scheduleDayOff(FreeDayDTO freeDayDTO) throws Exception {
         FreeDay freeDay = new FreeDay();
         if (freeDay!=null) {
-            if (){
-                freeDay.setDay(freeDayDTO.day());
-            }
         }
         else{
             throw new Exception("The doctor has already a day");
@@ -55,8 +52,6 @@ public class DoctorServicesImpl implements DoctorServices {
 
     @Override
     public List<ItemAppointmentDTO> listFutureAppointment() {
-
-        listFu
 
         return null;
     }

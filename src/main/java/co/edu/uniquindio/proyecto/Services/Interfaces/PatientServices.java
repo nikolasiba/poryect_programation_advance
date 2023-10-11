@@ -1,30 +1,32 @@
 package co.edu.uniquindio.proyecto.Services.Interfaces;
 
-import co.edu.uniquindio.proyecto.Dto.PatientDTOS.ChangePasswordPatientDTO;
-import co.edu.uniquindio.proyecto.Dto.PatientDTOS.CreateAppointmentPatientDTO;
-import co.edu.uniquindio.proyecto.Dto.PatientDTOS.EditedPatientDTO;
-import co.edu.uniquindio.proyecto.Dto.PatientDTOS.PatientDTO;
-import co.edu.uniquindio.proyecto.models.Enum.Specialization;
+import co.edu.uniquindio.proyecto.Dto.PatientDTOS.*;
+import co.edu.uniquindio.proyecto.Exception.AppointmentWasNotFoundException;
+import co.edu.uniquindio.proyecto.Exception.PatientNotExistException;
+import co.edu.uniquindio.proyecto.Model.Enum.AppointmentState;
+import co.edu.uniquindio.proyecto.Model.Enum.DoctorState;
+import co.edu.uniquindio.proyecto.Model.Enum.Specialization;
+
+import java.util.List;
 
 public interface PatientServices {
 
-    int sigIn(PatientDTO patientDTO);
-
-    PatientDTO editAccount(EditedPatientDTO editedPatientDTO);
-
-    String deleteAccount(String id);
-
+    int sigIn(PatientDTO patientDTO) throws Exception;
+    int editAccount(EditedPatientDTO editedPatientDTO) throws PatientNotExistException;
+    void deleteAccount(int id) throws Exception;
+    //consultar que retorno darle a este metodo, de enviar link de recuperación
+    void sendLink(String email) throws Exception;
     //consultar que retorno darle a este metodo
-    void enviarLinkRecuperacion();
+    int changePassword(ChangePasswordPatientDTO changePasswordPatientDTO) throws Exception;
+    List<ItemDoctorDTO> checkAvailability(Specialization specialization, DoctorState doctorState);
+    int createAppointment(CreateAppointmentPatientDTO createAppointmentPatientDTO) throws Exception;
+    int cancelAppointement(int code) throws AppointmentWasNotFoundException;
+    List<AppointmentStateDTO> filterAppointmentsByState(AppointmentState appointmentState);
 
-    //consultar que retorno darle a este metodo
-    String changePassword(ChangePasswordPatientDTO changePasswordPatientDTO);
-    
-    String checkAvailability(Specialization specialization);
-    String createAppointment(CreateAppointmentPatientDTO createAppointmentPatientDTO);
-    void crearPQRS();
 
-    void listarPQRSPaciente();
+    void createPQRS();
+
+    void filterPQRS();
 
     void responderPQRS();
 
@@ -35,6 +37,5 @@ public interface PatientServices {
     void filtrarCitasPorMedico();
 
     void verDetalleCita();
-
 
 }
