@@ -7,14 +7,13 @@ import lombok.*;
 import java.io.Serializable;
 
 
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@MappedSuperclass
-
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 
 public class User extends Account implements Serializable {
 

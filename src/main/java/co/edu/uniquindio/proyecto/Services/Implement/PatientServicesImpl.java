@@ -79,7 +79,7 @@ public class PatientServicesImpl implements PatientServices {
     }
 
     private boolean validateIfEmailExist(String email) {
-        return patientRepo.finByEmail(email)!= null;
+        return patientRepo.findByEmail(email)!= null;
     }
 
     private boolean validateIfExists(int id) {
@@ -161,7 +161,7 @@ public class PatientServicesImpl implements PatientServices {
             throw new PatientNotExistException("Patient with email "+changePasswordPatientDTO.email()+" doesn´t exist");
         }
 
-        Patient patient = patientRepo.finByEmail(changePasswordPatientDTO.email());
+        Patient patient = patientRepo.findByEmail(changePasswordPatientDTO.email());
 
         if (changePasswordPatientDTO.repeatPassword().equals(changePasswordPatientDTO.password())){
             throw new PssWrdNotMatchException("Passwords don´t match, please repeat");
@@ -180,6 +180,7 @@ public class PatientServicesImpl implements PatientServices {
         emailServices.sendEmail(emailDTO);
 
         return patient.getCode();
+
     }
 
     @Override

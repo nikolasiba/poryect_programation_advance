@@ -37,4 +37,6 @@ public class Patient extends User implements Serializable {
     private List<Appointment>appointmentList;
 
 
+
+
 }
