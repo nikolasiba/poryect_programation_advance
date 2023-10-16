@@ -21,6 +21,7 @@ public class ImageServicesImpl implements ImageServices {
     private final Cloudinary cloudinary;
 
     public ImageServicesImpl(){
+
         Map<String,String> config = new HashMap<>();
         config.put("cloud_name", "dcabxchxb");
         config.put("api_key", "125593646187625");
@@ -35,6 +36,7 @@ public class ImageServicesImpl implements ImageServices {
 
         File file = convert(image);
         return cloudinary.uploader().upload(file, ObjectUtils.asMap("folder", "uniquindio/proyecto/photos"));
+
     }
 
     private File convert(MultipartFile image)throws IOException {
@@ -51,6 +53,9 @@ public class ImageServicesImpl implements ImageServices {
 
     @Override
     public Map daleteImage(String idImage) throws Exception {
+
         return cloudinary.uploader().destroy(idImage, ObjectUtils.emptyMap());
+
     }
+
 }

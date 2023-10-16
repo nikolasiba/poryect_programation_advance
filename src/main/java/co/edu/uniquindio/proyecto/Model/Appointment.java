@@ -27,6 +27,8 @@ public class Appointment implements Serializable {
     @NotNull
     private LocalDateTime appointmentDate;
 
+    @Lob
+    @NotNull
     @Column(length = 500)
     private String reason;
 

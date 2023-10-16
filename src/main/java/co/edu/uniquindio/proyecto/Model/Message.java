@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class Message implements Serializable {
 
     @Id
-    private String code;
+    private int code;
 
     private LocalDateTime createdDate;
 

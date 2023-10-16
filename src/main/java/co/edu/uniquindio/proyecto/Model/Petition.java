@@ -1,7 +1,9 @@
 package co.edu.uniquindio.proyecto.Model;
 
 import co.edu.uniquindio.proyecto.Model.Enum.PetitionState;
+import co.edu.uniquindio.proyecto.Model.Enum.TypePetition;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.io.Serializable;
@@ -17,14 +19,16 @@ import java.util.List;
 public class Petition implements Serializable {
 
     @Id
-    private String code;
+    private int code;
 
+    @NotNull
     private LocalDateTime createdDate;
 
-    private String type;
-
-    @Column(length= 500)
+    @Column(length= 500, nullable = false)
     private String reason;
+
+    @Enumerated
+    private TypePetition typePetition;
 
     @Enumerated(EnumType.STRING)
     private PetitionState petitionState;

@@ -1,8 +1,10 @@
 package co.edu.uniquindio.proyecto.Services.Interfaces;
 
 import co.edu.uniquindio.proyecto.Dto.PatientDTOS.*;
+import co.edu.uniquindio.proyecto.Exception.AppointmentNotRelatedException;
 import co.edu.uniquindio.proyecto.Exception.AppointmentWasNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.PatientNotExistException;
+import co.edu.uniquindio.proyecto.Exception.PetitionNotFoundException;
 import co.edu.uniquindio.proyecto.Model.Enum.AppointmentState;
 import co.edu.uniquindio.proyecto.Model.Enum.DoctorState;
 import co.edu.uniquindio.proyecto.Model.Enum.Specialization;
@@ -22,10 +24,8 @@ public interface PatientServices {
     int createAppointment(CreateAppointmentPatientDTO createAppointmentPatientDTO) throws Exception;
     int cancelAppointement(int code) throws AppointmentWasNotFoundException;
     List<AppointmentStateDTO> filterAppointmentsByState(AppointmentState appointmentState);
-
-
-    void createPQRS();
-
+    int createPetition(ItemPetitionDTO itemPetitionDTO) throws AppointmentNotRelatedException;
+    int cancelPetition(int code) throws PetitionNotFoundException;
     void filterPQRS();
 
     void responderPQRS();

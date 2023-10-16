@@ -5,17 +5,14 @@ import co.edu.uniquindio.proyecto.Dto.PatientDTOS.*;
 import co.edu.uniquindio.proyecto.Exception.*;
 import co.edu.uniquindio.proyecto.Model.Appointment;
 import co.edu.uniquindio.proyecto.Model.Doctor;
-import co.edu.uniquindio.proyecto.Model.Enum.AppointmentState;
-import co.edu.uniquindio.proyecto.Model.Enum.DoctorState;
-import co.edu.uniquindio.proyecto.Model.Enum.PatientState;
-import co.edu.uniquindio.proyecto.Model.Enum.Specialization;
+import co.edu.uniquindio.proyecto.Model.Enum.*;
 import co.edu.uniquindio.proyecto.Model.Patient;
 import co.edu.uniquindio.proyecto.Model.Petition;
 import co.edu.uniquindio.proyecto.Repository.AppointmentRepo;
 import co.edu.uniquindio.proyecto.Repository.DoctorRepo;
 import co.edu.uniquindio.proyecto.Repository.PatientRepo;
-import co.edu.uniquindio.proyecto.Services.Interfaces.EmailServices;
-import co.edu.uniquindio.proyecto.Services.Interfaces.PatientServices;
+import co.edu.uniquindio.proyecto.Repository.PetitionRepo;
+import co.edu.uniquindio.proyecto.Services.Interfaces.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,9 +28,15 @@ public class PatientServicesImpl implements PatientServices {
 
     final PatientRepo patientRepo;
     final DoctorRepo doctorRepo;
-    final EmailServices emailServices;
-    final AppointmentRepo appointmentRepo;
 
+    final AppointmentRepo appointmentRepo;
+    final PetitionRepo petitionRepo;
+
+    final EmailServices emailServices;
+    final ImageServices imageServices;
+
+    final PetitionServices petitionServices;
+    final AppointmentServices appointmentServices;
 
 
     @Override
@@ -56,7 +59,10 @@ public class PatientServicesImpl implements PatientServices {
         patient.setName(patientDTO.name());
         patient.setIdentification(patientDTO.identification());
         patient.setPhone(patientDTO.phone());
+
         patient.setUrlPicture(patientDTO.urlPicture());
+
+
         patient.setCity(patientDTO.city());
 
         patient.setBirthday(patientDTO.birthday());
@@ -72,6 +78,8 @@ public class PatientServicesImpl implements PatientServices {
                 "Wellcome to appointment team, thanks to you with your support "
         );
 
+
+
         emailServices.sendEmail(emailDTO);
 
         return newPatient.getCode();
@@ -79,7 +87,7 @@ public class PatientServicesImpl implements PatientServices {
     }
 
     private boolean validateIfEmailExist(String email) {
-        return patientRepo.finByEmail(email)!= null;
+        return patientRepo.findByEmail(email)!= null;
     }
 
     private boolean validateIfExists(int id) {
@@ -161,7 +169,7 @@ public class PatientServicesImpl implements PatientServices {
             throw new PatientNotExistException("Patient with email "+changePasswordPatientDTO.email()+" doesn´t exist");
         }
 
-        Patient patient = patientRepo.finByEmail(changePasswordPatientDTO.email());
+        Patient patient = patientRepo.findByEmail(changePasswordPatientDTO.email());
 
         if (changePasswordPatientDTO.repeatPassword().equals(changePasswordPatientDTO.password())){
             throw new PssWrdNotMatchException("Passwords don´t match, please repeat");
@@ -200,118 +208,31 @@ public class PatientServicesImpl implements PatientServices {
 
     }
 
-    private boolean validateNumberAppointment(){
-        return filterAppointmentsByState(AppointmentState.PENDING).size() <= 2;
-    }
-
     @Override
-    public int createAppointment(CreateAppointmentPatientDTO createAppointmentPatientDTO) throws
-            Exception {
-
-        if (!validateNumberAppointment()){
-            throw new MaxNumAppointmentReachedException("You have exceeded the maximum number of appointments");
+    public int createAppointment(CreateAppointmentPatientDTO createAppointmentPatientDTO) throws Exception {
+            return appointmentServices.createAppointment(createAppointmentPatientDTO);
         }
-
-        Optional<Patient> optionalPatient  = patientRepo.findById(createAppointmentPatientDTO.patientCode());
-        Optional<Doctor> optionalDoctor = doctorRepo.findById(createAppointmentPatientDTO.doctorCode());
-
-        if (optionalPatient.isEmpty()){
-            throw new PatientNotExistException("Patient with the code "+createAppointmentPatientDTO.patientCode()+
-                    " doesn´t exist");
-        }
-        if (optionalDoctor.isEmpty()){
-            throw new DoctorNotExistException("Doctor with the code "+createAppointmentPatientDTO.doctorCode()+
-                    " doesn´t exist");
-        }
-
-        Patient patient = optionalPatient.get();
-        Doctor doctor = optionalDoctor.get();
-
-        Appointment appointment = new Appointment();
-
-        appointment.setAppointmentDate(createAppointmentPatientDTO.appointmentDate());
-        appointment.setCreatedDate(LocalDateTime.now());
-        appointment.setReason(createAppointmentPatientDTO.reason());
-
-        appointment.setPatient(patient);
-        appointment.setDoctor(doctor);
-
-        appointment.setAppointmentState(AppointmentState.PENDING);
-
-        appointmentRepo.save(appointment);
-
-        EmailDTO emailDTOpatient = new EmailDTO(
-                patient.getEmail(),
-                "Appointment Center Team",
-                "Hi!\n You have created an appointment, with the doctor: "+
-                        doctor.getName()+", the day "+appointment.getAppointmentDate()+
-                        " , it was created at: "+appointment.getCreatedDate()+". Hope you stay here, thank you"
-        );
-
-        emailServices.sendEmail(emailDTOpatient);
-
-        EmailDTO emailDTOdoctor = new EmailDTO(
-                doctor.getEmail(),
-                "Appointment Center Team",
-                "Hi!\n You have an appointemen with the patient:"+
-                        patient.getName()+" the day "+appointment.getAppointmentDate()+
-                        "it was created at: "+appointment.getCreatedDate()+". Have a good attention, see you soon"
-
-        );
-
-        emailServices.sendEmail(emailDTOdoctor);
-
-        return appointment.getCode();
-
-    }
 
     @Override
     public int cancelAppointement(int code) throws AppointmentWasNotFoundException {
-
-        Optional<Appointment> optional = appointmentRepo.findById(code);
-
-        if (optional.isEmpty()){
-            throw new AppointmentWasNotFoundException("Appointment with the code "+code+" wasn´t found");
-        }
-
-        Appointment appointment = optional.get();
-
-        appointment.setAppointmentState(AppointmentState.CANCELLED);
-
-        appointmentRepo.save(appointment);
-
-        return appointment.getCode();
-
+        return appointmentServices.cancelAppointment(code);
     }
 
     @Override
     public List<AppointmentStateDTO> filterAppointmentsByState(AppointmentState appointmentState) {
-
-        List<Appointment> appointments = appointmentRepo.findAllByAppointmentState(appointmentState);
-        List<AppointmentStateDTO> answer = new ArrayList<>();
-
-        for (Appointment a:appointments) {
-            answer.add(new AppointmentStateDTO(
-                    a.getAppointmentState(),
-                    a.getCode(),
-                    a.getAppointmentDate()) );
-
-        }
-
-        return answer;
-
+        return appointmentServices.filterAppointmentsByState(appointmentState);
     }
-
-
 
     @Override
-    public void createPQRS() {
-        validatePQRS();
-
+    public int createPetition(ItemPetitionDTO itemPetitionDTO) throws AppointmentNotRelatedException {
+        return petitionServices.createPetition(itemPetitionDTO);
     }
 
-    private Boolean validatePQRS() {
-        return null;
+    @Override
+    public int cancelPetition(int code) throws PetitionNotFoundException {
+
+        return petitionServices.cancelPetition(code);
+
     }
 
     @Override
