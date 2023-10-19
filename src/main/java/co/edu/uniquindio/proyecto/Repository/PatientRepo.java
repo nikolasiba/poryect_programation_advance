@@ -9,11 +9,8 @@ import java.util.List;
 @Repository
 public interface PatientRepo extends JpaRepository<Patient, Integer> {
 
-
-    List<Patient> findAllByCode(int code);
-
     Patient findByIdentification(int identification);
-
     Patient findByEmail(String email);
+    Patient findByName(String name);
 
 }

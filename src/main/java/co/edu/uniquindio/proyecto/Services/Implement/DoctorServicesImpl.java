@@ -1,8 +1,8 @@
 package co.edu.uniquindio.proyecto.Services.Implement;
 
+import co.edu.uniquindio.proyecto.Dto.AppointmentDTOS.ItemAppointmentDoctorDTO;
 import co.edu.uniquindio.proyecto.Dto.AttentionDTO;
 import co.edu.uniquindio.proyecto.Dto.FreeDayDTO;
-import co.edu.uniquindio.proyecto.Dto.ItemAppointmentDTO;
 import co.edu.uniquindio.proyecto.Repository.AppointmentRepo;
 import co.edu.uniquindio.proyecto.Repository.AttentionRepo;
 import co.edu.uniquindio.proyecto.Repository.DoctorRepo;
@@ -24,7 +24,7 @@ public class DoctorServicesImpl implements DoctorServices {
     final AttentionRepo attentionRepo;
 
     @Override
-    public String preformAttention(AttentionDTO attentionDTO) throws Exception {
+    public int preformAttention(AttentionDTO attentionDTO) throws Exception {
 
 
 
@@ -51,7 +51,7 @@ public class DoctorServicesImpl implements DoctorServices {
     }
 
     @Override
-    public List<ItemAppointmentDTO> listFutureAppointment() {
+    public List<ItemAppointmentDoctorDTO> listFutureAppointment() {
 
         return null;
     }

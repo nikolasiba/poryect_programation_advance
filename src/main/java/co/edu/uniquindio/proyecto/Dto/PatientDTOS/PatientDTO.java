@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.Dto.PatientDTOS;
 
+import co.edu.uniquindio.proyecto.Model.Appointment;
 import co.edu.uniquindio.proyecto.Model.Enum.BloodType;
 import co.edu.uniquindio.proyecto.Model.Enum.City;
 import co.edu.uniquindio.proyecto.Model.Enum.Eps;
@@ -10,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record PatientDTO(
 
@@ -36,9 +38,9 @@ public record PatientDTO(
         @Email
         @Column(length = 50, nullable = false, unique = true)
         String email,
-
         @Column(length = 10, nullable = false, unique = true)
         String password
+
 
     ) {
 }

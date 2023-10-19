@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class Attention implements Serializable {
 
     @Id
-    private String code;
+    private int code;
 
     @Lob
     @Column(length = 300)

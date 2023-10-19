@@ -18,7 +18,7 @@ import java.io.Serializable;
 
 public class User extends Account implements Serializable {
 
-    @Column(length = 30, nullable = false, unique = true)
+    @Column(length = 30, nullable = false)
     private String name;
 
     @Column(nullable = false, unique = true)
