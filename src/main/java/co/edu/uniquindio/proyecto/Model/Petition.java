@@ -27,7 +27,7 @@ public class Petition implements Serializable {
     @Column(length= 500, nullable = false)
     private String reason;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private TypePetition typePetition;
 
     @Enumerated(EnumType.STRING)

@@ -4,7 +4,8 @@ public enum PatientState {
 
     ASSET,
     INACTIVE,
-    INVALIDATED
+    PENALIZED
+
     /*
                if (patientServices.numberOfCanceledAppointment() >= 3){
                 adminServices.penalizePatient(PatientState.INVALIDATED);

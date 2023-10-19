@@ -2,6 +2,7 @@ package co.edu.uniquindio.proyecto.Model;
 
 import co.edu.uniquindio.proyecto.Model.Enum.City;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 import java.io.Serializable;
@@ -18,13 +19,14 @@ import java.io.Serializable;
 
 public class User extends Account implements Serializable {
 
+    @NotEmpty
     @Column(length = 30, nullable = false)
     private String name;
 
     @Column(nullable = false, unique = true)
     private int identification;
 
-    @Column(length = 30, nullable = false)
+    @Column(length = 10, nullable = false)
     private String phone;
 
     /**

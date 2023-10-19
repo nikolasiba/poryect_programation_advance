@@ -29,7 +29,7 @@ public class EmailServicesImpl implements EmailServices {
         MimeMessageHelper helper = new MimeMessageHelper(mensaje);
 
         helper.setSubject(emailDTO.affair());
-        helper.setText(emailDTO.bady(), true);
+        helper.setText(emailDTO.body(), true);
         helper.setTo(emailDTO.addressee());
         helper.setFrom("no_reply@dominio.com");
 

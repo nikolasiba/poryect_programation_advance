@@ -25,7 +25,6 @@ public class Account implements Serializable {
     @Column(length = 50, nullable = false, unique = true)
     private String email;
 
-    @NonNull
     @Column(length = 10, nullable = false, unique = true)
     private String password;
 

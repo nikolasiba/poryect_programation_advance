@@ -7,6 +7,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -19,7 +20,7 @@ public class FreeDay implements Serializable {
     private String code;
 
     @Column(nullable = false)
-    private String day;
+    private LocalDate day;
 
     @ManyToOne
     private Doctor doctor;
