@@ -58,7 +58,7 @@ public class AdminServicesImpl implements AdminServices {
         d.setEmail(doctorRecordDTO.email());
         d.setPassword(doctorRecordDTO.password());
         d.setUrlPicture(doctorRecordDTO.urlPicture());
-        d.setDoctorState(DoctorState.AVAILABE);
+        d.setDoctorState(DoctorState.AVAILABLE);
 
         Doctor newDoctor = doctorRepo.save(d);
 

@@ -14,6 +14,8 @@ import java.util.List;
 public interface AppointmentRepo extends JpaRepository<Appointment,Integer> {
 
     List<Appointment>findAllByAppointmentState(AppointmentState appointmentState);
+    List<Appointment>findAllByPatientCode(int code);
+
 
 
 

@@ -34,10 +34,9 @@ public interface PatientServices {
             throws DoctorsNotFoundException;
     AppointmentDTO createAppointment(ItemAppointmentPatientDTO itemAppointmentPatientDTO) throws Exception;
     int cancelAppointment(int code) throws Exception;
-    List<AppointmentDTO> listAppointment() throws AppointmentNotFoundException, AppointmentsNotFoundException;
+    List<AppointmentDTO> listAppointment(int code) throws AppointmentNotFoundException, AppointmentsNotFoundException;
     List<AppointmentDTO> filterAppointmentsByState(AppointmentState appointmentState) throws AppointmentsNotFoundException;
     ItemAttentionDTO showDetailsAppointment(int code)
             throws AppointmentNotFoundException, AttentionNotFoundException;
-    int createPetition(PetitionDTO petitionDTO) throws AppointmentNotFoundException,
-            AttentionNotAssociatedAppointmentException, AccountNotFoundException;
+    int createPetition(PetitionDTO petitionDTO) throws Exception;
 }

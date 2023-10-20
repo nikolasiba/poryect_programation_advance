@@ -27,12 +27,10 @@ public class EmailServicesImpl implements EmailServices {
 
         MimeMessage mensaje = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mensaje);
-
         helper.setSubject(emailDTO.affair());
         helper.setText(emailDTO.body(), true);
         helper.setTo(emailDTO.addressee());
-        helper.setFrom("no_reply@dominio.com");
-
+        helper.setFrom("pepitoperez@proyecto.com");
         javaMailSender.send(mensaje);
 
     }

@@ -53,13 +53,13 @@ public class PatientServicesImpl implements PatientServices {
     @Override
     public int sigIn(PatientDTO patientDTO) throws Exception {
 
-        if(validateRepeatedId(patientDTO.identification())){
-            throw new PatientWithIdRepeatedException("The patient with the id: "+patientDTO.identification()+
+        if (validateRepeatedId(patientDTO.identification())) {
+            throw new PatientWithIdRepeatedException("The patient with the id: " + patientDTO.identification() +
                     " has been created");
         }
 
-        if (validateRepeatedEmail(patientDTO.email())){
-            throw new PatientWithEmailRepeatedException("The patient with the email: "+patientDTO.email()+
+        if (validateRepeatedEmail(patientDTO.email())) {
+            throw new PatientWithEmailRepeatedException("The patient with the email: " + patientDTO.email() +
                     " has been created");
         }
 
@@ -100,13 +100,12 @@ public class PatientServicesImpl implements PatientServices {
     }
 
     private boolean validateRepeatedEmail(String email) {
-        return patientRepo.findByEmail(email)!=null;
+        return patientRepo.findByEmail(email) != null;
     }
 
     private boolean validateRepeatedId(int identification) {
-        return patientRepo.findByIdentification(identification)!=null;
+        return patientRepo.findByIdentification(identification) != null;
     }
-
 
 
     @Override
@@ -124,6 +123,7 @@ public class PatientServicesImpl implements PatientServices {
         wanted.setBloodType(editedPatientDTO.bloodType());
         wanted.setEps(editedPatientDTO.eps());
 
+
         patientRepo.save(wanted);
 
         return wanted.getCode();
@@ -131,12 +131,12 @@ public class PatientServicesImpl implements PatientServices {
     }
 
     @Override
-    public PatientDTO getPatientByIdentification(int identification) throws PatientNotFoundException{
+    public PatientDTO getPatientByIdentification(int identification) throws PatientNotFoundException {
 
         Patient patient = patientRepo.findByIdentification(identification);
 
-        if (patient==null){
-            throw new PatientNotFoundException("There is not patient with the id: "+identification);
+        if (patient == null) {
+            throw new PatientNotFoundException("There is not patient with the id: " + identification);
         }
 
         return convertDTO(patient);
@@ -183,9 +183,9 @@ public class PatientServicesImpl implements PatientServices {
     @Override
     public void sendLink(String email) throws Exception {
 
-        if (validatePatientEmail(email)){
-            throw new PatientNotFoundException("The patient with the email: "+email+
-            " was not found");
+        if (validatePatientEmail(email)) {
+            throw new PatientNotFoundException("The patient with the email: " + email +
+                    " was not found");
         }
 
         EmailDTO emailDTO = new EmailDTO(
@@ -199,19 +199,19 @@ public class PatientServicesImpl implements PatientServices {
     }
 
     private boolean validatePatientEmail(String email) {
-        return patientRepo.findByEmail(email)==null;
+        return patientRepo.findByEmail(email) == null;
     }
 
     @Override
     public int changePassword(ItemPatientPwdDTO itemPatientPwdDTO) throws Exception {
 
-        if (validatePatientEmail(itemPatientPwdDTO.email())){
-            throw new PatientNotFoundException("Patient with email "+itemPatientPwdDTO.email()+" does not exist");
+        if (validatePatientEmail(itemPatientPwdDTO.email())) {
+            throw new PatientNotFoundException("Patient with email " + itemPatientPwdDTO.email() + " does not exist");
         }
 
         Patient patient = patientRepo.findByEmail(itemPatientPwdDTO.email());
 
-        if (!itemPatientPwdDTO.repeatPassword().equals(itemPatientPwdDTO.password())){
+        if (!itemPatientPwdDTO.repeatPassword().equals(itemPatientPwdDTO.password())) {
             throw new PwdNotMatchException("Passwords don´t match, please repeat it");
         }
 
@@ -236,20 +236,20 @@ public class PatientServicesImpl implements PatientServices {
     public List<ItemDoctorPatientDTO> checkAvailability(Specialization specialization, DoctorState doctorState)
             throws DoctorsNotFoundException {
 
-        List<Doctor> doctors = doctorRepo.findAllBySpecializationAndDoctorState(specialization, DoctorState.AVAILABE);
+        List<Doctor> doctors = doctorRepo.findAllBySpecializationAndDoctorState(specialization, DoctorState.AVAILABLE);
 
-        if (doctors.isEmpty()){
-            throw new DoctorsNotFoundException("There are not doctors available with the specialization that you need,"+
+        if (doctors.isEmpty()) {
+            throw new DoctorsNotFoundException("There are not doctors available with the specialization that you need," +
                     " please do it later");
         }
 
         List<ItemDoctorPatientDTO> answer = new ArrayList<>();
 
-        for (Doctor d: doctors) {
-            answer.add( new ItemDoctorPatientDTO(
+        for (Doctor d : doctors) {
+            answer.add(new ItemDoctorPatientDTO(
                     d.getIdentification(),
                     d.getName(),
-                    d.getScheduleList()) );
+                    d.getScheduleList()));
         }
 
         return answer;
@@ -261,31 +261,31 @@ public class PatientServicesImpl implements PatientServices {
             throws Exception {
 
 
-        if (!validateNumAppointment(itemAppointmentPatientDTO.patientCode())){
+        if (!validateNumAppointment(itemAppointmentPatientDTO.patientCode())) {
             throw new MaxNumAppointmentReachedException("You have exceeded the maximum number of appointments");
         }
 
-        if (validatePatientState(itemAppointmentPatientDTO.patientCode())){
-            throw new PatientPenalizedException("The patient with the code: "+itemAppointmentPatientDTO.patientCode()+
+        if (validatePatientState(itemAppointmentPatientDTO.patientCode())) {
+            throw new PatientPenalizedException("The patient with the code: " + itemAppointmentPatientDTO.patientCode() +
                     "is penalized");
         }
 
         Optional<Doctor> optionalDoctor = doctorRepo.findById(itemAppointmentPatientDTO.doctorCode());
 
-        if (optionalDoctor.isEmpty()){
-            throw new DoctorNotFoundException("Doctor with the code "+itemAppointmentPatientDTO.doctorCode()+
+        if (optionalDoctor.isEmpty()) {
+            throw new DoctorNotFoundException("Doctor with the code " + itemAppointmentPatientDTO.doctorCode() +
                     " does not exist");
         }
 
         Patient patient = getPatientByCode(itemAppointmentPatientDTO.patientCode());
         Doctor doctor = optionalDoctor.get();
 
-        if (patient.getPatientState().equals(PatientState.INACTIVE)){
-            throw new PatientInactiveException("The patient "+patient.getName()+" was invalidated");
+        if (patient.getPatientState().equals(PatientState.INACTIVE)) {
+            throw new PatientInactiveException("The patient " + patient.getName() + " was invalidated");
         }
 
-        if (validateNumAppointmentCanceled(itemAppointmentPatientDTO.patientCode())){
-            throw new ReachedNumCancelAppointmentsException("The patient "+patient.getName()+
+        if (validateNumAppointmentCanceled(itemAppointmentPatientDTO.patientCode())) {
+            throw new ReachedNumCancelAppointmentsException("The patient " + patient.getName() +
                     " has benn reached the number of canceled appointment");
         }
 
@@ -301,15 +301,14 @@ public class PatientServicesImpl implements PatientServices {
         appointment.setAppointmentState(AppointmentState.PENDING);
 
 
-
         Appointment newAppointment = appointmentRepo.save(appointment);
 
         EmailDTO emailDTOpatient = new EmailDTO(
                 patient.getEmail(),
                 "Appointment Center Team",
-                "Hi!\n You have created an appointment, with the doctor: "+
-                        doctor.getName()+", the day "+appointment.getAppointmentDate()+
-                        " , it was created at: "+appointment.getCreatedDate()+" Hope you stay here, thank you"
+                "Hi!\n You have created an appointment, with the doctor: " +
+                        doctor.getName() + ", the day " + appointment.getAppointmentDate() +
+                        " , it was created at: " + appointment.getCreatedDate() + " Hope you stay here, thank you"
         );
 
         emailServices.sendEmail(emailDTOpatient);
@@ -317,9 +316,9 @@ public class PatientServicesImpl implements PatientServices {
         EmailDTO emailDTOdoctor = new EmailDTO(
                 doctor.getEmail(),
                 "Appointment Center Team",
-                "Hi!\n You have an appointment with the patient:"+
-                        patient.getName()+" the day "+appointment.getAppointmentDate()+
-                        "it was created at: "+appointment.getCreatedDate()+". Have a good attention, see you soon"
+                "Hi!\n You have an appointment with the patient:" +
+                        patient.getName() + " the day " + appointment.getAppointmentDate() +
+                        "it was created at: " + appointment.getCreatedDate() + ". Have a good attention, see you soon"
 
         );
 
@@ -340,9 +339,9 @@ public class PatientServicesImpl implements PatientServices {
     }
 
     private Appointment getAppointmentByCode(int code) throws AppointmentNotFoundException {
-        Optional<Appointment>optional = appointmentRepo.findById(code);
-        if (optional.isEmpty()){
-            throw new AppointmentNotFoundException("Appointment with the code: "+code+" was not found");
+        Optional<Appointment> optional = appointmentRepo.findById(code);
+        if (optional.isEmpty()) {
+            throw new AppointmentNotFoundException("Appointment with the code: " + code + " was not found");
         }
         return optional.get();
     }
@@ -352,29 +351,30 @@ public class PatientServicesImpl implements PatientServices {
 
         Optional<Patient> optional = patientRepo.findById(i);
 
-        if (optional.isEmpty()){
-            throw new PatientNotFoundException("Patient with the code: "+i+" was not found");
+        if (optional.isEmpty()) {
+            throw new PatientNotFoundException("Patient with the code: " + i + " was not found");
         }
 
         Patient patient = optional.get();
 
         List<Appointment> appointments = patient.getAppointmentList();
-        List<Appointment>canceledAppointments = new ArrayList<>();
-        for (Appointment a:appointments) {
-            if (a.getAppointmentState().equals(AppointmentState.CANCELLED)){
+        List<Appointment> canceledAppointments = new ArrayList<>();
+        for (Appointment a : appointments) {
+            if (a.getAppointmentState().equals(AppointmentState.CANCELLED)) {
                 canceledAppointments.add(a);
             }
         }
 
-        return canceledAppointments.size()>=3;
+        return canceledAppointments.size() >= 3;
 
     }
+
     private Patient getPatientByCode(int code) throws PatientNotFoundException {
 
         Optional<Patient> optional = patientRepo.findById(code);
 
-        if (optional.isEmpty()){
-            throw new PatientNotFoundException("The patient with the code: "+ code+" was not found");
+        if (optional.isEmpty()) {
+            throw new PatientNotFoundException("The patient with the code: " + code + " was not found");
         }
 
         return optional.get();
@@ -384,8 +384,8 @@ public class PatientServicesImpl implements PatientServices {
 
         Optional<Patient> optional = patientRepo.findById(i);
 
-        if (optional.isEmpty()){
-            throw new PatientNotFoundException("Patient with the code: "+i+" was not found");
+        if (optional.isEmpty()) {
+            throw new PatientNotFoundException("Patient with the code: " + i + " was not found");
         }
 
         Patient patient = optional.get();
@@ -395,17 +395,17 @@ public class PatientServicesImpl implements PatientServices {
 
     private boolean validateNumAppointment(int code) throws PatientNotFoundException {
 
-        Optional<Patient>optional=patientRepo.findById(code);
+        Optional<Patient> optional = patientRepo.findById(code);
 
-        if (optional.isEmpty()){
-            throw new PatientNotFoundException("Patient with the code: "+code+" was not found");
+        if (optional.isEmpty()) {
+            throw new PatientNotFoundException("Patient with the code: " + code + " was not found");
         }
 
         Patient patient = optional.get();
 
         int numberAppointments = patient.getAppointmentList().size();
 
-        return numberAppointments<=3;
+        return numberAppointments <= 3;
 
     }
 
@@ -419,7 +419,7 @@ public class PatientServicesImpl implements PatientServices {
 
         Appointment appointment = getAppointmentByCode(code);
 
-        if (validateNumAppointmentCanceled(code)){
+        if (validateNumAppointmentCanceled(code)) {
 
             penalizePatient(appointment.getPatient());
 
@@ -449,15 +449,15 @@ public class PatientServicesImpl implements PatientServices {
     }
 
     @Override
-    public List<AppointmentDTO> listAppointment() throws AppointmentNotFoundException, AppointmentsNotFoundException {
+    public List<AppointmentDTO> listAppointment(int code) throws AppointmentNotFoundException, AppointmentsNotFoundException {
 
-        List<Appointment>appointments = appointmentRepo.findAll();
-        if (appointments.isEmpty()){
+        List<Appointment> appointments = appointmentRepo.findAllByPatientCode(code);
+        if (appointments.isEmpty()) {
             throw new AppointmentsNotFoundException("There are not appointments");
         }
-        List<AppointmentDTO> answer =new ArrayList<>();
+        List<AppointmentDTO> answer = new ArrayList<>();
 
-        for (Appointment a: appointments) {
+        for (Appointment a : appointments) {
             answer.add(convertAppointmentDTO(a.getCode()));
         }
 
@@ -470,19 +470,19 @@ public class PatientServicesImpl implements PatientServices {
 
         List<Appointment> appointments = appointmentRepo.findAllByAppointmentState(appointmentState);
 
-        if (appointments.isEmpty()){
+        if (appointments.isEmpty()) {
             throw new AppointmentsNotFoundException("There are not appointments");
         }
 
         List<AppointmentDTO> answer = new ArrayList<>();
 
-        for (Appointment a:appointments) {
+        for (Appointment a : appointments) {
             answer.add(new AppointmentDTO(
                     a.getCode(),
                     a.getAppointmentDate(),
                     a.getDoctor().getName(),
                     a.getDoctor().getSpecialization()
-            ) );
+            ));
 
         }
 
@@ -497,7 +497,7 @@ public class PatientServicesImpl implements PatientServices {
         Appointment appointment = getAppointmentByCode(code);
         Attention attention = attentionRepo.findByAppointmentCode(code);
 
-        if(attention==null){
+        if (attention == null) {
             throw new AttentionNotFoundException("There is not attention associated with an appointment");
         }
         return new ItemAttentionDTO(
@@ -512,24 +512,23 @@ public class PatientServicesImpl implements PatientServices {
     }
 
     @Override
-    public int createPetition(PetitionDTO petitionDTO) throws AppointmentNotFoundException,
-            AttentionNotAssociatedAppointmentException, AccountNotFoundException {
+    public int createPetition(PetitionDTO petitionDTO) throws Exception {
 
         Optional<Appointment> optional = appointmentRepo.findById(petitionDTO.codeAppointment());
 
-        if (optional.isEmpty()){
-            throw new AppointmentNotFoundException("Appointment with the code: "+petitionDTO.codeAppointment()+" was not found");
+        if (optional.isEmpty()) {
+            throw new AppointmentNotFoundException("Appointment with the code: " + petitionDTO.codeAppointment() + " was not found");
         }
 
-        if(!validateAssociatedAppointment(petitionDTO.codeAppointment())){
-            throw new AttentionNotAssociatedAppointmentException("the appointment code: "+petitionDTO.codeAppointment()+
+        if (!validateAssociatedAppointment(petitionDTO.codeAppointment())) {
+            throw new AttentionNotAssociatedAppointmentException("the appointment code: " + petitionDTO.codeAppointment() +
                     " is not associated with any attention");
         }
 
         Account a = accountRepo.findByCode(petitionDTO.patientCode());
 
-        if(a==null){
-            throw new AccountNotFoundException("the account with the code: "+petitionDTO.patientCode()+
+        if (a == null) {
+            throw new AccountNotFoundException("the account with the code: " + petitionDTO.patientCode() +
                     "was not found");
         }
 
@@ -548,16 +547,24 @@ public class PatientServicesImpl implements PatientServices {
         message.setAccount(a);
         message.setPetition(petition);
 
+        if (petition.getMessageList() == null) {
+
+            petition.setMessageList(new ArrayList<>());
+        }
+
         petition.getMessageList().add(message);
 
-        /*emailServices.sendEmail();*/
+
+        EmailDTO emailDTO = new EmailDTO(a.getEmail(), "se genero un reporte", "se ha generado una nueva solicitud");
+
+        emailServices.sendEmail(emailDTO);
 
         return petition.getCode();
 
     }
 
     private boolean validateAssociatedAppointment(int code) {
-        return attentionRepo.findByAppointmentCode(code)!=null;
+        return attentionRepo.findByAppointmentCode(code) != null;
     }
 
 
