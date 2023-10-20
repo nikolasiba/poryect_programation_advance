@@ -8,7 +8,10 @@ import co.edu.uniquindio.proyecto.Dto.Patient.ItemAppointmentPatientDTO;
 import co.edu.uniquindio.proyecto.Dto.Petition.ItemDoctorPatientDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.ItemPatientPwdDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.PatientDTO;
+import co.edu.uniquindio.proyecto.Dto.Petition.PetitionDTO;
+import co.edu.uniquindio.proyecto.Exception.AppointmentException.AccountNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.AppointmentException.AppointmentsNotFoundException;
+import co.edu.uniquindio.proyecto.Exception.AttentionNotAssociatedAppointmentException;
 import co.edu.uniquindio.proyecto.Exception.AttentionNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.AppointmentNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.DoctorsNotFoundException;
@@ -33,7 +36,8 @@ public interface PatientServices {
     int cancelAppointment(int code) throws Exception;
     List<AppointmentDTO> listAppointment() throws AppointmentNotFoundException, AppointmentsNotFoundException;
     List<AppointmentDTO> filterAppointmentsByState(AppointmentState appointmentState) throws AppointmentsNotFoundException;
-    ItemAttentionDTO showDetailsAppointment(AppointmentDTO appointmentDTO)
+    ItemAttentionDTO showDetailsAppointment(int code)
             throws AppointmentNotFoundException, AttentionNotFoundException;
-
+    int createPetition(PetitionDTO petitionDTO) throws AppointmentNotFoundException,
+            AttentionNotAssociatedAppointmentException, AccountNotFoundException;
 }

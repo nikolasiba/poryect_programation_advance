@@ -1,33 +1,31 @@
 package co.edu.uniquindio.proyecto.Services.Implement;
 
-import co.edu.uniquindio.proyecto.Dto.*;
+import co.edu.uniquindio.proyecto.Dto.AppointmentDTO;
+import co.edu.uniquindio.proyecto.Dto.EmailDTO;
+import co.edu.uniquindio.proyecto.Dto.ItemAttentionDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.EditedPatientDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.ItemAppointmentPatientDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.ItemPatientPwdDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.PatientDTO;
 import co.edu.uniquindio.proyecto.Dto.Petition.ItemDoctorPatientDTO;
+import co.edu.uniquindio.proyecto.Dto.Petition.PetitionDTO;
+import co.edu.uniquindio.proyecto.Exception.AppointmentException.AccountNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.AppointmentException.AppointmentsNotFoundException;
+import co.edu.uniquindio.proyecto.Exception.AppointmentException.MaxNumAppointmentReachedException;
+import co.edu.uniquindio.proyecto.Exception.AppointmentException.PatientPenalizedException;
+import co.edu.uniquindio.proyecto.Exception.AttentionNotAssociatedAppointmentException;
 import co.edu.uniquindio.proyecto.Exception.AttentionNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.*;
-import co.edu.uniquindio.proyecto.Exception.AppointmentException.MaxNumAppointmentReachedException;
 import co.edu.uniquindio.proyecto.Exception.PatientException.PatientNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.PatientException.PatientWithEmailRepeatedException;
 import co.edu.uniquindio.proyecto.Exception.PatientException.PatientWithIdRepeatedException;
 import co.edu.uniquindio.proyecto.Exception.PatientException.PwdNotMatchException;
-import co.edu.uniquindio.proyecto.Exception.AppointmentException.PatientPenalizedException;
-import co.edu.uniquindio.proyecto.Model.Appointment;
-import co.edu.uniquindio.proyecto.Model.Attention;
-import co.edu.uniquindio.proyecto.Model.Doctor;
-import co.edu.uniquindio.proyecto.Model.Enum.AppointmentState;
-import co.edu.uniquindio.proyecto.Model.Enum.DoctorState;
-import co.edu.uniquindio.proyecto.Model.Enum.PatientState;
-import co.edu.uniquindio.proyecto.Model.Enum.Specialization;
-import co.edu.uniquindio.proyecto.Model.Patient;
-import co.edu.uniquindio.proyecto.Repository.AppointmentRepo;
-import co.edu.uniquindio.proyecto.Repository.AttentionRepo;
-import co.edu.uniquindio.proyecto.Repository.DoctorRepo;
-import co.edu.uniquindio.proyecto.Repository.PatientRepo;
-import co.edu.uniquindio.proyecto.Services.Interfaces.*;
+import co.edu.uniquindio.proyecto.Model.*;
+import co.edu.uniquindio.proyecto.Model.Enum.*;
+import co.edu.uniquindio.proyecto.Repository.*;
+import co.edu.uniquindio.proyecto.Services.Interfaces.AdminServices;
+import co.edu.uniquindio.proyecto.Services.Interfaces.EmailServices;
+import co.edu.uniquindio.proyecto.Services.Interfaces.PatientServices;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -45,8 +43,12 @@ public class PatientServicesImpl implements PatientServices {
     final DoctorRepo doctorRepo;
     final AppointmentRepo appointmentRepo;
     final AttentionRepo attentionRepo;
+    final PetitionRepo petitionRepo;
+    final AccountRepo accountRepo;
+
 
     final EmailServices emailServices;
+    final AdminServices adminServices;
 
     @Override
     public int sigIn(PatientDTO patientDTO) throws Exception {
@@ -55,6 +57,7 @@ public class PatientServicesImpl implements PatientServices {
             throw new PatientWithIdRepeatedException("The patient with the id: "+patientDTO.identification()+
                     " has been created");
         }
+
         if (validateRepeatedEmail(patientDTO.email())){
             throw new PatientWithEmailRepeatedException("The patient with the email: "+patientDTO.email()+
                     " has been created");
@@ -79,7 +82,10 @@ public class PatientServicesImpl implements PatientServices {
         patient.setEps(patientDTO.eps());
         patient.setPatientState(PatientState.ASSET);
 
-        Patient newPatietn = patientRepo.save(patient);
+        Patient newPatient = patientRepo.save(patient);
+
+        Account a = accountRepo.findByCode(newPatient.getCode());
+        accountRepo.save(a);
 
         EmailDTO emailDTO = new EmailDTO(
                 patient.getEmail(),
@@ -89,7 +95,7 @@ public class PatientServicesImpl implements PatientServices {
 
         emailServices.sendEmail(emailDTO);
 
-        return newPatietn.getCode();
+        return newPatient.getCode();
 
     }
 
@@ -485,11 +491,12 @@ public class PatientServicesImpl implements PatientServices {
     }
 
     @Override
-    public ItemAttentionDTO showDetailsAppointment(AppointmentDTO appointmentDTO)
+    public ItemAttentionDTO showDetailsAppointment(int code)
             throws AppointmentNotFoundException, AttentionNotFoundException {
 
-        Appointment appointment = getAppointmentByCode(appointmentDTO.code());
-        Attention attention = attentionRepo.findByAppointmentCode(appointmentDTO.code());
+        Appointment appointment = getAppointmentByCode(code);
+        Attention attention = attentionRepo.findByAppointmentCode(code);
+
         if(attention==null){
             throw new AttentionNotFoundException("There is not attention associated with an appointment");
         }
@@ -503,4 +510,55 @@ public class PatientServicesImpl implements PatientServices {
         );
 
     }
+
+    @Override
+    public int createPetition(PetitionDTO petitionDTO) throws AppointmentNotFoundException,
+            AttentionNotAssociatedAppointmentException, AccountNotFoundException {
+
+        Optional<Appointment> optional = appointmentRepo.findById(petitionDTO.codeAppointment());
+
+        if (optional.isEmpty()){
+            throw new AppointmentNotFoundException("Appointment with the code: "+petitionDTO.codeAppointment()+" was not found");
+        }
+
+        if(!validateAssociatedAppointment(petitionDTO.codeAppointment())){
+            throw new AttentionNotAssociatedAppointmentException("the appointment code: "+petitionDTO.codeAppointment()+
+                    " is not associated with any attention");
+        }
+
+        Account a = accountRepo.findByCode(petitionDTO.patientCode());
+
+        if(a==null){
+            throw new AccountNotFoundException("the account with the code: "+petitionDTO.patientCode()+
+                    "was not found");
+        }
+
+        Petition petition = new Petition();
+        petition.setCreatedDate(LocalDateTime.now());
+        petition.setReason(petitionDTO.reason());
+        petition.setTypePetition(petitionDTO.typePetition());
+        petition.setPetitionState(PetitionState.PENDING);
+
+        String m = petitionDTO.message();
+
+        Message message = new Message();
+
+        message.setCreatedDate(LocalDateTime.now());
+        message.setMessage(m);
+        message.setAccount(a);
+        message.setPetition(petition);
+
+        petition.getMessageList().add(message);
+
+        /*emailServices.sendEmail();*/
+
+        return petition.getCode();
+
+    }
+
+    private boolean validateAssociatedAppointment(int code) {
+        return attentionRepo.findByAppointmentCode(code)!=null;
+    }
+
+
 }

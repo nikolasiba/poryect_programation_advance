@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PetitionRepo extends JpaRepository<Petition, Integer> {
+    Petition findByAppointmentCode(int code);
 }

@@ -15,6 +15,7 @@ import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.DoctorWithIdRepeate
 import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.DoctorsNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.PetitionExceptions.PetitionNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.PetitionExceptions.PetitionsNotFoundException;
+import co.edu.uniquindio.proyecto.Model.Account;
 import co.edu.uniquindio.proyecto.Model.Enum.PetitionState;
 
 import java.util.List;

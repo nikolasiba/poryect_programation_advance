@@ -7,15 +7,15 @@ insert into account values (6, 'luis@email.com', '1425');
 insert into account values (7, 'haker@email.com', 'root');
 insert into account values (8, 'anonimus@email.com', 'root1');
 
-insert into patient values ("ARMENIA",123,'pepito','1234556','url_picture','no allergies','2001-10-01',
-                            "AB_NEGATIVE","COOMEVA", "ASSET",1);
-insert into patient values ("BOGOTA",1234,'pepa','325145','url_picture','no allergies','1998-07-01',
-                            "AB_POSITIVE","SURA", "ASSET",2);
-insert into patient values ("CALI",1235,'pedro','4316123','url_picture','no allergies','2001-08-01',
-                            "A_NEGATIVE","SANITAS", "ASSET",3);
-
 insert into admin values (7);
 insert into admin values (8);
+
+insert into patient values (ARMENIA,123,'pepito','1234556','url_picture','no allergies','2001-10-01',
+                            AB_NEGATIVE, COOMEVA, ASSET,1);
+insert into patient values (BOGOTA,1234,'pepa','325145','url_picture','no allergies','1998-07-01',
+                            AB_POSITIVE,SURA, ASSET,2);
+insert into patient values (CALI,1235,'pedro','4316123','url_picture','no allergies','2001-08-01',
+                            A_NEGATIVE,SANITAS, ASSET,3);
 
 insert into doctor values ("ARMENIA", 11223, 'Juan', '14353415','url_picture',"AVAILABLE", "CARDIOLOGIST",4);
 insert into doctor values ("BOGOTA", 2341, 'Jose', '234511','url_picture',"AVAILABLE", "OPHTHALMOLOGY",5);
