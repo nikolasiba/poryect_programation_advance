@@ -1,22 +1,23 @@
-insert into account values (1, 'pepito@email.com', '123');
-insert into account values (2, 'pepa@email.com', '1234');
+insert into account values (123, 'pepito@email.com', '123');
+/*insert into account values (2, 'pepa@email.com', '1234');
 insert into account values (3, 'pedro@email.com', '12345');
 insert into account values (4, 'Juan@email.com', '12');
 insert into account values (5, 'Jose@email.com', '12358');
 insert into account values (6, 'luis@email.com', '1425');
 insert into account values (7, 'haker@email.com', 'root');
-insert into account values (8, 'anonimus@email.com', 'root1');
+insert into account values (8, 'anonimus@email.com', 'root1');*/
 
-insert into patient values ("ARMENIA",123,'pepito','1234556','url_picture','no allergies','2001-10-01',
-                            "AB_NEGATIVE","COOMEVA", "ASSET",1);
-insert into patient values ("BOGOTA",1234,'pepa','325145','url_picture','no allergies','1998-07-01',
+
+INSERT INTO patient (city, identification, name, phone, url_picture, allergies, birthday, blood_type, eps, patient_state, code)
+VALUES ('ARMENIA', 123, 'pepito', '1234556', 'url_picture', 'no allergies', '2001-10-01', 'AB_NEGATIVE', 'COOMEVA', 'ASSET', 123);
+/*insert into patient values ("BOGOTA",1234,'pepa','325145','url_picture','no allergies','1998-07-01',
                             "AB_POSITIVE","SURA", "ASSET",2);
 insert into patient values ("CALI",1235,'pedro','4316123','url_picture','no allergies','2001-08-01',
                             "A_NEGATIVE","SANITAS", "ASSET",3);
-
-insert into admin values (7);
-insert into admin values (8);
-
+*/
+/*insert into admin values (7);
+insert into admin values (8);*/
+/*
 insert into doctor values ("ARMENIA", 11223, 'Juan', '14353415','url_picture',"AVAILABLE", "CARDIOLOGIST",4);
 insert into doctor values ("BOGOTA", 2341, 'Jose', '234511','url_picture',"AVAILABLE", "OPHTHALMOLOGY",5);
 insert into doctor values ("CALI", 3241, 'luis', '23511432','url_picture',"AVAILABLE", "SURGERY",6);
@@ -49,3 +50,4 @@ insert into message values (2, '2023-10-21 11:34:56.123456','Hi, how are u',8,3,
 insert into message values (3, '2023-10-21 12:34:56.123456','fine thank u',1,4,1);
 insert into message values (4, '2023-10-21 12:34:56.123456','ok',8,4,1);
 
+*/
