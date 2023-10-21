@@ -1,58 +1,42 @@
 package co.edu.uniquindio.proyecto.Services.Interfaces;
 
-import co.edu.uniquindio.proyecto.Dto.PatientDTOS.*;
-import co.edu.uniquindio.proyecto.Exception.*;
-import co.edu.uniquindio.proyecto.Model.Appointment;
+
+import co.edu.uniquindio.proyecto.Dto.AppointmentDTO;
+import co.edu.uniquindio.proyecto.Dto.ItemAttentionDTO;
+import co.edu.uniquindio.proyecto.Dto.Patient.EditedPatientDTO;
+import co.edu.uniquindio.proyecto.Dto.Patient.ItemAppointmentPatientDTO;
+import co.edu.uniquindio.proyecto.Dto.Petition.ItemDoctorPatientDTO;
+import co.edu.uniquindio.proyecto.Dto.Patient.ItemPatientPwdDTO;
+import co.edu.uniquindio.proyecto.Dto.Patient.PatientDTO;
+import co.edu.uniquindio.proyecto.Dto.Petition.PetitionDTO;
+import co.edu.uniquindio.proyecto.Exception.AppointmentException.AccountNotFoundException;
+import co.edu.uniquindio.proyecto.Exception.AppointmentException.AppointmentsNotFoundException;
+import co.edu.uniquindio.proyecto.Exception.AttentionNotAssociatedAppointmentException;
+import co.edu.uniquindio.proyecto.Exception.AttentionNotFoundException;
+import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.AppointmentNotFoundException;
+import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.DoctorsNotFoundException;
+import co.edu.uniquindio.proyecto.Exception.PatientException.PatientNotFoundException;
 import co.edu.uniquindio.proyecto.Model.Enum.AppointmentState;
 import co.edu.uniquindio.proyecto.Model.Enum.DoctorState;
 import co.edu.uniquindio.proyecto.Model.Enum.Specialization;
-import co.edu.uniquindio.proyecto.Model.Patient;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface PatientServices {
 
     int sigIn(PatientDTO patientDTO) throws Exception;
-
-    int editAccount(EditedPatientDTO editedPatientDTO) throws PatientNotExistException;
-    void deleteAccount(int id) throws Exception;
-
+    int editAccount(EditedPatientDTO editedPatientDTO) throws PatientNotFoundException;
+    PatientDTO getPatientByIdentification(int identification) throws PatientNotFoundException;
+    void deleteAccount(int code) throws Exception;
     void sendLink(String email) throws Exception;
-    int changePassword(ChangePasswordPatientDTO changePasswordPatientDTO) throws Exception;
-
-    List<ItemDoctorDTO> checkAvailability(Specialization specialization, DoctorState doctorState);
-
-
-    int createAppointment(CreateAppointmentPatientDTO createAppointmentPatientDTO) throws Exception;
-    int cancelAppointement(int code) throws Exception;
-
-    int calculateAge(LocalDate birthday);
-
-
-    List<Appointment> listCodePatientAppointments(int code);
-    List<AppointmentStateDTO> filterAppointmentsByState(AppointmentState appointmentState) throws NotAppointmentsCreatedException;
-
-
-    Patient filterPatientByCode(int code)throws PatientNotExistException;
-    PatientDTO getPatientByName(String name) throws PatientNotExistException;
-    PatientDTO getPatientByIdentification(int identification) throws PatientNotExistException;
-
-
-
-
-
-    int createPetition(ItemPetitionDTO itemPetitionDTO) throws AppointmentNotRelatedException;
-    int cancelPetition(int code) throws PetitionNotFoundException;
-    void filterPQRS();
-
-    void responderPQRS();
-
-
-    void filtrarCitasPorFecha();
-
-    void filtrarCitasPorMedico();
-
-    void verDetalleCita();
-
+    int changePassword(ItemPatientPwdDTO itemPatientPwdDTO) throws Exception;
+    List<ItemDoctorPatientDTO> checkAvailability(Specialization specialization, DoctorState doctorState)
+            throws DoctorsNotFoundException;
+    AppointmentDTO createAppointment(ItemAppointmentPatientDTO itemAppointmentPatientDTO) throws Exception;
+    int cancelAppointment(int code) throws Exception;
+    List<AppointmentDTO> listAppointment(int code) throws AppointmentNotFoundException, AppointmentsNotFoundException;
+    List<AppointmentDTO> filterAppointmentsByState(AppointmentState appointmentState) throws AppointmentsNotFoundException;
+    ItemAttentionDTO showDetailsAppointment(int code)
+            throws AppointmentNotFoundException, AttentionNotFoundException;
+    int createPetition(PetitionDTO petitionDTO) throws Exception;
 }

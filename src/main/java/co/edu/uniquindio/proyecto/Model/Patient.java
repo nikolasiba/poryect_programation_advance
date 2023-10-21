@@ -30,7 +30,7 @@ public class Patient extends User implements Serializable {
     @Enumerated(EnumType.STRING)
     private Eps eps;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private PatientState patientState;
 
     @OneToMany(mappedBy = "patient")

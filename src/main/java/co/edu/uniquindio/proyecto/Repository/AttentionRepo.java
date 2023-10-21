@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AttentionRepo extends JpaRepository<Attention,Integer> {
+    Attention findByAppointmentCode(int code);
+
 }

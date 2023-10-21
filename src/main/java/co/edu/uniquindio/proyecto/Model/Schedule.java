@@ -7,6 +7,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -17,16 +18,16 @@ import java.io.Serializable;
 public class Schedule implements Serializable {
 
     @Id
-    private String code;
+    private int code;
 
     @Column(nullable = false)
     private String day;
 
     @Column(nullable = false)
-    private String initialTime;
+    private LocalTime initialTime;
 
     @Column(nullable = false)
-    private String finalTime;
+    private LocalTime finalTime;
 
     @ManyToOne
     private Doctor doctor;
