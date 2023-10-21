@@ -3,6 +3,7 @@ package co.edu.uniquindio.proyecto.test;
 import co.edu.uniquindio.proyecto.Dto.Admin.DoctorRecordDTO;
 import co.edu.uniquindio.proyecto.Dto.Admin.ScheduleDTO;
 import co.edu.uniquindio.proyecto.Model.Enum.City;
+import co.edu.uniquindio.proyecto.Model.Enum.Day;
 import co.edu.uniquindio.proyecto.Model.Enum.Specialization;
 import co.edu.uniquindio.proyecto.Services.Interfaces.AdminServices;
 import jakarta.transaction.Transactional;
@@ -25,7 +26,7 @@ public class AdminTest {
     public void createDoctorTest(){
 
         List<ScheduleDTO> schedules = new ArrayList<>();
-        schedules.add( new ScheduleDTO("LUNES",
+        schedules.add( new ScheduleDTO(Day.WEDNESDAY,
                 LocalTime.of(7, 0, 0),
                 LocalTime.of(14, 0, 0) ) );
 

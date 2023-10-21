@@ -1,9 +1,7 @@
 package co.edu.uniquindio.proyecto.Model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import co.edu.uniquindio.proyecto.Model.Enum.Day;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
@@ -20,8 +18,8 @@ public class Schedule implements Serializable {
     @Id
     private int code;
 
-    @Column(nullable = false)
-    private String day;
+    @Enumerated(EnumType.STRING)
+    private Day day;
 
     @Column(nullable = false)
     private LocalTime initialTime;
