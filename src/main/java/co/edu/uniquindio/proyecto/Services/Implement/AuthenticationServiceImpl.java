@@ -41,10 +41,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         ) {
             throw new Exception("La contraseña ingresada es incorrecta");
         }
-        return new TokenDTO(crearToken(account));
+        return new TokenDTO(createToke(account));
     }
 
-    private String crearToken(Account account) {
+    private String createToke(Account account) {
         String rol;
         String name;
         if (account instanceof Patient) {

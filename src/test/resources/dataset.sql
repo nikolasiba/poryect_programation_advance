@@ -1,5 +1,5 @@
 -- insert into account values (123, 'pepito@email.com', '123');
-insert into account values (2, 'nikolasiba23@gmail.com', '1234');
+insert into account values (2, 'nikolasiba23@gmail.com', '$2a$10$Uvl/0QA0XiLho0poKx/Op.dCM5QMpDYePn6zE6a4k/o9qeaD8psAW');
 insert into account values (3, 'pedro@email.com', '12345');
 insert into account values (4, 'Juan@email.com', '11223');
 insert into account values (5, 'Jose@email.com', '2341');
@@ -32,7 +32,7 @@ insert into free_day values (3,'2023-12-31', 6 );
 -- insert into appointment values (1,'2023-12-01 13:34:56', "PENDING", '2023-10-19 09:34:56.123456',
 --                                 'I have something', 4, 1);
 insert into appointment values (2,'2023-11-01 14:34:56.123456', "PENDING", '2023-10-18 13:34:56.123456',
-                                'I have something', 5, 2);
+                                'I have something', 4, 2);
 insert into appointment values (3,'2023-11-01 12:34:56.123456', "PENDING", '2023-10-17 05:34:56.123456',
                                 'I have something', 6, 3);
 --

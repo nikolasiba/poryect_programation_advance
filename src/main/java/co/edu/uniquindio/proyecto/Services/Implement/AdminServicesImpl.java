@@ -43,14 +43,13 @@ public class AdminServicesImpl implements AdminServices {
     @Override
     public int createDoctor(DoctorRecordDTO doctorRecordDTO) throws DoctorWithIdRepeatedException, DoctorWithEmailRepeatedException {
 
-        if( validateRepeatedId(doctorRecordDTO.identification()) ){
-            throw new DoctorWithIdRepeatedException("The id "+doctorRecordDTO.identification()+" has been already used");
+        if (validateRepeatedId(doctorRecordDTO.identification())) {
+            throw new DoctorWithIdRepeatedException("The id " + doctorRecordDTO.identification() + " has been already used");
         }
 
-        if( validateRepeatedEmail(doctorRecordDTO.email()) ){
-            throw new DoctorWithEmailRepeatedException("The email "+doctorRecordDTO.email()+" has been already used");
+        if (validateRepeatedEmail(doctorRecordDTO.email())) {
+            throw new DoctorWithEmailRepeatedException("The email " + doctorRecordDTO.email() + " has been already used");
         }
-
 
 
         Doctor d = new Doctor();
@@ -58,7 +57,7 @@ public class AdminServicesImpl implements AdminServices {
         d.setIdentification(doctorRecordDTO.identification());
         d.setPhone(doctorRecordDTO.phone());
         d.setName(doctorRecordDTO.name());
-        d.setSpecialization( doctorRecordDTO.specialization());
+        d.setSpecialization(doctorRecordDTO.specialization());
         d.setCity(doctorRecordDTO.city());
         d.setEmail(doctorRecordDTO.email());
         d.setPassword(encodePassword(doctorRecordDTO.password()));
@@ -67,7 +66,8 @@ public class AdminServicesImpl implements AdminServices {
 
         Doctor newDoctor = doctorRepo.save(d);
 
-        assignSchedules( newDoctor, doctorRecordDTO.schedules() );
+        System.out.println("\n esta es la contrasenaaaaaaaaaa " + d.getPassword() + "\n");
+        assignSchedules(newDoctor, doctorRecordDTO.schedules());
 
         return newDoctor.getCode();
 
@@ -75,13 +75,13 @@ public class AdminServicesImpl implements AdminServices {
 
     private void assignSchedules(Doctor newDoctor, List<ScheduleDTO> schedules) {
 
-        for( ScheduleDTO s : schedules ){
+        for (ScheduleDTO s : schedules) {
 
             Schedule sd = new Schedule();
             sd.setDay(s.day());
-            sd.setInitialTime( s.initialTime());
-            sd.setFinalTime( s.finalTime() );
-            sd.setDoctor( newDoctor );
+            sd.setInitialTime(s.initialTime());
+            sd.setFinalTime(s.finalTime());
+            sd.setDoctor(newDoctor);
             sd.setScheduleState(ScheduleState.AVAILABLE);
 
             scheduleRepo.save(sd);
@@ -93,6 +93,7 @@ public class AdminServicesImpl implements AdminServices {
     private boolean validateRepeatedEmail(String email) {
         return doctorRepo.findByEmail(email) != null;
     }
+
     private boolean validateRepeatedId(int identification) {
         return doctorRepo.findByIdentification(identification) != null;
     }
@@ -102,8 +103,8 @@ public class AdminServicesImpl implements AdminServices {
 
         Optional<Doctor> optional = doctorRepo.findById(doctorDTO.code());
 
-        if( optional.isEmpty() ){
-            throw new DoctorNotFoundException("There is not doctor with the code "+doctorDTO.code());
+        if (optional.isEmpty()) {
+            throw new DoctorNotFoundException("There is not doctor with the code " + doctorDTO.code());
         }
 
         Doctor wanted = optional.get();
@@ -116,7 +117,7 @@ public class AdminServicesImpl implements AdminServices {
         wanted.setEmail(doctorDTO.email());
         wanted.setUrlPicture(doctorDTO.urlPicture());
 
-        doctorRepo.save( wanted );
+        doctorRepo.save(wanted);
 
         return wanted.getCode();
 
@@ -125,16 +126,16 @@ public class AdminServicesImpl implements AdminServices {
     @Override
     public void deleteDoctor(int code) throws DoctorNotFoundException {
 
-        Optional<Doctor> optional =doctorRepo.findById(code);
+        Optional<Doctor> optional = doctorRepo.findById(code);
 
-        if( optional.isEmpty() ){
-            throw new DoctorNotFoundException("There is not doctor with the code "+code);
+        if (optional.isEmpty()) {
+            throw new DoctorNotFoundException("There is not doctor with the code " + code);
         }
 
         Doctor wanted = optional.get();
         wanted.setDoctorState(DoctorState.INACTIVE);
 
-        doctorRepo.save( wanted );
+        doctorRepo.save(wanted);
 
         //medicoRepo.delete(buscado);
 
@@ -145,18 +146,18 @@ public class AdminServicesImpl implements AdminServices {
 
         List<Doctor> doctors = doctorRepo.findAll();
 
-        if(doctors.isEmpty()){
+        if (doctors.isEmpty()) {
             throw new DoctorsNotFoundException("There are not doctors registered");
         }
 
         List<ItemDoctorDTO> answer = new ArrayList<>();
 
-        for(Doctor d: doctors){
-            answer.add( new ItemDoctorDTO(
+        for (Doctor d : doctors) {
+            answer.add(new ItemDoctorDTO(
                     d.getIdentification(),
                     d.getName(),
                     d.getUrlPicture(),
-                    d.getSpecialization()) );
+                    d.getSpecialization()));
         }
 
         /*List<ItemMedicoDTO> respuesta = medicos.stream().map( m -> new ItemMedicoDTO(
@@ -176,8 +177,8 @@ public class AdminServicesImpl implements AdminServices {
 
         Optional<Doctor> optional = doctorRepo.findById(code);
 
-        if( optional.isEmpty() ){
-            throw new DoctorNotFoundException("There is not doctor with the code "+code);
+        if (optional.isEmpty()) {
+            throw new DoctorNotFoundException("There is not doctor with the code " + code);
         }
 
         Doctor wanted = optional.get();
@@ -185,12 +186,12 @@ public class AdminServicesImpl implements AdminServices {
         List<Schedule> schedules = scheduleRepo.findAllByDoctorCode(code);
         List<ScheduleDTO> schedulesDTO = new ArrayList<>();
 
-        for( Schedule s : schedules ){
-            schedulesDTO.add( new ScheduleDTO(
+        for (Schedule s : schedules) {
+            schedulesDTO.add(new ScheduleDTO(
                     s.getDay(),
                     s.getInitialTime(),
                     s.getFinalTime()
-            ) );
+            ));
         }
 
         return new DoctorDetailDTO(
@@ -212,15 +213,15 @@ public class AdminServicesImpl implements AdminServices {
 
         List<Petition> petitionList = petitionRepo.findAll();
 
-        if (petitionList.isEmpty()){
+        if (petitionList.isEmpty()) {
             throw new PetitionsNotFoundException("There are not petition registered");
         }
 
         List<ItemPetitionDTO> answer = new ArrayList<>();
 
-        for( Petition p: petitionList ){
+        for (Petition p : petitionList) {
 
-            answer.add( new ItemPetitionDTO(
+            answer.add(new ItemPetitionDTO(
 
                     p.getPetitionState(),
                     p.getReason(),
@@ -238,8 +239,8 @@ public class AdminServicesImpl implements AdminServices {
 
         Optional<Petition> optional = petitionRepo.findById(code);
 
-        if(optional.isEmpty()){
-            throw new PetitionNotFoundException("There is not petition with the code: "+code);
+        if (optional.isEmpty()) {
+            throw new PetitionNotFoundException("There is not petition with the code: " + code);
         }
 
         Petition wanted = optional.get();
@@ -274,20 +275,20 @@ public class AdminServicesImpl implements AdminServices {
 
         Optional<Petition> optionalPetition = petitionRepo.findById(respLogDTO.petitionCode());
 
-        if(optionalPetition.isEmpty()){
-            throw new PetitionNotFoundException("There is not petition with the code: "+respLogDTO.petitionCode());
+        if (optionalPetition.isEmpty()) {
+            throw new PetitionNotFoundException("There is not petition with the code: " + respLogDTO.petitionCode());
         }
 
         Optional<Account> optionalAccount = accountRepo.findById(respLogDTO.accountCode());
 
-        if(optionalAccount.isEmpty()){
-            throw new AccountNotFoundException("There is not account with the code  "+respLogDTO.accountCode());
+        if (optionalAccount.isEmpty()) {
+            throw new AccountNotFoundException("There is not account with the code  " + respLogDTO.accountCode());
         }
 
         Message newMessage = new Message();
 
         newMessage.setPetition(optionalPetition.get());
-        newMessage.setCreatedDate( LocalDateTime.now() );
+        newMessage.setCreatedDate(LocalDateTime.now());
         newMessage.setAccount(optionalAccount.get());
         newMessage.setMessage(respLogDTO.message());
 
@@ -302,14 +303,14 @@ public class AdminServicesImpl implements AdminServices {
 
         Optional<Petition> optional = petitionRepo.findById(petitionCode);
 
-        if( optional.isEmpty() ){
-            throw new PetitionNotFoundException("There is not petition with the code: "+petitionCode);
+        if (optional.isEmpty()) {
+            throw new PetitionNotFoundException("There is not petition with the code: " + petitionCode);
         }
 
         Petition petition = optional.get();
-        petition.setPetitionState( petitionState );
+        petition.setPetitionState(petitionState);
 
-        petitionRepo.save( petition );
+        petitionRepo.save(petition);
 
     }
 
@@ -319,12 +320,12 @@ public class AdminServicesImpl implements AdminServices {
         List<Appointment> appointments = appointmentRepo.findAll();
         List<ItemAppointmentAdminDTO> answer = new ArrayList<>();
 
-        if(appointments.isEmpty()){
+        if (appointments.isEmpty()) {
             throw new AppointmentsNotFoundException("There are not appointments created");
         }
 
-        for( Appointment a : appointments ){
-            answer.add( new ItemAppointmentAdminDTO(
+        for (Appointment a : appointments) {
+            answer.add(new ItemAppointmentAdminDTO(
 
                     a.getCode(),
                     a.getPatient().getIdentification(),
@@ -334,15 +335,14 @@ public class AdminServicesImpl implements AdminServices {
                     a.getAppointmentState(),
                     a.getAppointmentDate()
 
-            ) );
+            ));
         }
 
         return answer;
     }
 
 
-
-    private  String encodePassword(String password){
+    private String encodePassword(String password) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(password);
     }
