@@ -19,12 +19,14 @@ import co.edu.uniquindio.proyecto.Model.Enum.PetitionState;
 import co.edu.uniquindio.proyecto.Repository.*;
 import co.edu.uniquindio.proyecto.Services.Interfaces.AdminServices;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +50,8 @@ public class AdminServicesImpl implements AdminServices {
             throw new DoctorWithEmailRepeatedException("The email "+doctorRecordDTO.email()+" has been already used");
         }
 
+
+
         Doctor d = new Doctor();
 
         d.setIdentification(doctorRecordDTO.identification());
@@ -56,7 +60,7 @@ public class AdminServicesImpl implements AdminServices {
         d.setSpecialization( doctorRecordDTO.specialization());
         d.setCity(doctorRecordDTO.city());
         d.setEmail(doctorRecordDTO.email());
-        d.setPassword(doctorRecordDTO.password());
+        d.setPassword(encodePassword(doctorRecordDTO.password()));
         d.setUrlPicture(doctorRecordDTO.urlPicture());
         d.setDoctorState(DoctorState.AVAILABLE);
 
@@ -335,6 +339,11 @@ public class AdminServicesImpl implements AdminServices {
     }
 
 
+
+    private  String encodePassword(String password){
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(password);
+    }
 
 
 }
