@@ -1,11 +1,14 @@
 package co.edu.uniquindio.proyecto.Services.Implement;
 
+import co.edu.uniquindio.proyecto.Dto.Admin.ScheduleDTO;
 import co.edu.uniquindio.proyecto.Dto.AppointmentDTO;
 import co.edu.uniquindio.proyecto.Dto.Doctor.AppointmentDocDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.PatientDTO;
+import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.DoctorsNotFoundException;
 import co.edu.uniquindio.proyecto.Model.Appointment;
 import co.edu.uniquindio.proyecto.Model.Enum.AppointmentState;
 import co.edu.uniquindio.proyecto.Model.Patient;
+import co.edu.uniquindio.proyecto.Model.Schedule;
 import co.edu.uniquindio.proyecto.Repository.*;
 import co.edu.uniquindio.proyecto.Services.Interfaces.DoctorServices;
 import co.edu.uniquindio.proyecto.Services.Interfaces.PatientServices;
@@ -20,12 +23,10 @@ import java.util.List;
 public class DoctorServicesImpl implements DoctorServices {
 
     final DoctorRepo doctorRepo;
-
     final AppointmentRepo appointmentRepo;
+    final ScheduleRepo scheduleRepo;
 
-    final PetitionRepo petitionRepo;
     final PatientRepo patientRepo;
-
     final AttentionRepo attentionRepo;
 
     final PatientServices patientServices;
@@ -80,6 +81,7 @@ public class DoctorServicesImpl implements DoctorServices {
         return appointmentsDocDTO;
 
     }
+
 
 
 }

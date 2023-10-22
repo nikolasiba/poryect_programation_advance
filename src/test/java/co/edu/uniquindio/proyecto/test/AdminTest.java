@@ -3,7 +3,6 @@ package co.edu.uniquindio.proyecto.test;
 import co.edu.uniquindio.proyecto.Dto.Admin.DoctorRecordDTO;
 import co.edu.uniquindio.proyecto.Dto.Admin.ScheduleDTO;
 import co.edu.uniquindio.proyecto.Model.Enum.City;
-import co.edu.uniquindio.proyecto.Model.Enum.Day;
 import co.edu.uniquindio.proyecto.Model.Enum.Specialization;
 import co.edu.uniquindio.proyecto.Services.Interfaces.AdminServices;
 import jakarta.transaction.Transactional;
@@ -11,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ public class AdminTest {
     public void createDoctorTest(){
 
         List<ScheduleDTO> schedules = new ArrayList<>();
-        schedules.add( new ScheduleDTO(Day.WEDNESDAY,
+        schedules.add( new ScheduleDTO(LocalDate.of(2023, 10, 21),
                 LocalTime.of(7, 0, 0),
                 LocalTime.of(14, 0, 0) ) );
 

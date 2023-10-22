@@ -14,6 +14,7 @@ public interface DoctorRepo extends JpaRepository<Doctor, Integer> {
     Doctor findByEmail(String email);
 
     List<Doctor> findAllBySpecializationAndDoctorState(Specialization specialization, DoctorState doctorState);
+
     Doctor findByDoctorState(DoctorState doctorState);
 
 }

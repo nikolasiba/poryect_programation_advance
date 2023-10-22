@@ -16,6 +16,7 @@ import co.edu.uniquindio.proyecto.Exception.PetitionExceptions.PetitionsNotFound
 import co.edu.uniquindio.proyecto.Model.*;
 import co.edu.uniquindio.proyecto.Model.Enum.DoctorState;
 import co.edu.uniquindio.proyecto.Model.Enum.PetitionState;
+import co.edu.uniquindio.proyecto.Model.Enum.ScheduleState;
 import co.edu.uniquindio.proyecto.Repository.*;
 import co.edu.uniquindio.proyecto.Services.Interfaces.AdminServices;
 import lombok.RequiredArgsConstructor;
@@ -77,6 +78,7 @@ public class AdminServicesImpl implements AdminServices {
             sd.setInitialTime( s.initialTime());
             sd.setFinalTime( s.finalTime() );
             sd.setDoctor( newDoctor );
+            sd.setScheduleState(ScheduleState.AVAILABLE);
 
             scheduleRepo.save(sd);
 

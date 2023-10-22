@@ -45,7 +45,7 @@ public class PatientServicesImpl implements PatientServices {
     final AttentionRepo attentionRepo;
     final PetitionRepo petitionRepo;
     final AccountRepo accountRepo;
-
+    final ScheduleRepo scheduleRepo;
 
     final EmailServices emailServices;
     final AdminServices adminServices;
@@ -265,6 +265,14 @@ public class PatientServicesImpl implements PatientServices {
             throw new MaxNumAppointmentReachedException("You have exceeded the maximum number of appointments");
         }
 
+        Optional<Schedule> optional = scheduleRepo.findById(itemAppointmentPatientDTO.scheduleCode());
+
+        if (optional.isEmpty()) {
+            throw new Exception("this schedule is not available");
+        }
+
+        Schedule schedule = optional.get();
+
         if (validatePatientState(itemAppointmentPatientDTO.patientCode())) {
             throw new PatientPenalizedException("The patient with the code: " + itemAppointmentPatientDTO.patientCode() +
                     "is penalized");
@@ -291,7 +299,9 @@ public class PatientServicesImpl implements PatientServices {
 
         Appointment appointment = new Appointment();
 
-        appointment.setAppointmentDate(itemAppointmentPatientDTO.date());
+        LocalDateTime dateTime = schedule.getDay().atTime(schedule.getInitialTime());
+        appointment.setAppointmentDate(dateTime);
+
         appointment.setCreatedDate(LocalDateTime.now());
         appointment.setReason(itemAppointmentPatientDTO.reason());
 
@@ -300,8 +310,10 @@ public class PatientServicesImpl implements PatientServices {
 
         appointment.setAppointmentState(AppointmentState.PENDING);
 
-
         Appointment newAppointment = appointmentRepo.save(appointment);
+
+        schedule.setScheduleState(ScheduleState.NOT_AVAILABLE);
+        scheduleRepo.save(schedule);
 
         EmailDTO emailDTOpatient = new EmailDTO(
                 patient.getEmail(),

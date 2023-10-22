@@ -13,8 +13,9 @@ public record ItemAppointmentPatientDTO(
         int patientCode,
         @Positive
         int doctorCode,
-        @NotNull
-        LocalDateTime date,
+
+        @Positive
+        int  scheduleCode,
         @Lob
         @Column(length = 500, nullable = false)
         String reason
