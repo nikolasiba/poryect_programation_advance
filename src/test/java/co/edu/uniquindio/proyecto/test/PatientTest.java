@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.test;
 
+import co.edu.uniquindio.proyecto.Dto.AnswerPetitionDTO;
 import co.edu.uniquindio.proyecto.Dto.AppointmentDTO;
 import co.edu.uniquindio.proyecto.Dto.ItemAttentionDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.EditedPatientDTO;
@@ -7,6 +8,7 @@ import co.edu.uniquindio.proyecto.Dto.Patient.ItemAppointmentPatientDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.ItemPatientPwdDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.PatientDTO;
 import co.edu.uniquindio.proyecto.Dto.Petition.PetitionDTO;
+import co.edu.uniquindio.proyecto.Dto.PetitionMessagedDTO;
 import co.edu.uniquindio.proyecto.Exception.AppointmentException.AccountNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.AppointmentException.AppointmentsNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.AppointmentException.MaxNumAppointmentReachedException;
@@ -306,6 +308,52 @@ public class PatientTest {
             System.out.print(e.toString());
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    public void listAppointmentByDate() {
+        int patientCode = 2;
+        LocalDate date = LocalDate.now();
+
+        try {
+            List<AppointmentDTO> appointmentList = patientServices.listAppointmentByDate(patientCode, date);
+
+            System.out.print("\n" + appointmentList.get(0).toString() + "\n");
+        } catch (AppointmentsNotFoundException e) {
+            System.out.print(e.toString());
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+
+    @Test
+    public void listPetitionByPatient() {
+        int patientCode = 2;
+        try {
+            List<PetitionMessagedDTO> petitionMessagedDTOList = patientServices.listPetitionByPatient(patientCode);
+            System.out.print("\n" + petitionMessagedDTOList.get(0).toString() + "\n");
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    @Test
+    public void answerPetitionPatient() {
+        AnswerPetitionDTO answerPetitionDTO = new AnswerPetitionDTO(
+                1,
+                2,
+                "no me gusto la atencion"
+        );
+
+        try {
+            int response = patientServices.answerPetitionPatient(answerPetitionDTO);
+            if (response > 0) {
+                System.out.print("\n se genero correctamente la respuesta \n");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
         }
     }
 

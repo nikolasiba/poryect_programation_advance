@@ -1,8 +1,6 @@
 package co.edu.uniquindio.proyecto.Services.Implement;
 
-import co.edu.uniquindio.proyecto.Dto.AppointmentDTO;
-import co.edu.uniquindio.proyecto.Dto.EmailDTO;
-import co.edu.uniquindio.proyecto.Dto.ItemAttentionDTO;
+import co.edu.uniquindio.proyecto.Dto.*;
 import co.edu.uniquindio.proyecto.Dto.Patient.EditedPatientDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.ItemAppointmentPatientDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.ItemPatientPwdDTO;
@@ -16,6 +14,7 @@ import co.edu.uniquindio.proyecto.Exception.AppointmentException.PatientPenalize
 import co.edu.uniquindio.proyecto.Exception.AttentionNotAssociatedAppointmentException;
 import co.edu.uniquindio.proyecto.Exception.AttentionNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.*;
+import co.edu.uniquindio.proyecto.Exception.MaxNumPQRSException;
 import co.edu.uniquindio.proyecto.Exception.PatientException.PatientNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.PatientException.PatientWithEmailRepeatedException;
 import co.edu.uniquindio.proyecto.Exception.PatientException.PatientWithIdRepeatedException;
@@ -29,6 +28,7 @@ import co.edu.uniquindio.proyecto.Services.Interfaces.PatientServices;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -47,6 +47,7 @@ public class PatientServicesImpl implements PatientServices {
     final PetitionRepo petitionRepo;
     final AccountRepo accountRepo;
     final ScheduleRepo scheduleRepo;
+    final MessageRepo messageRepo;
 
     final EmailServices emailServices;
     final AdminServices adminServices;
@@ -527,6 +528,17 @@ public class PatientServicesImpl implements PatientServices {
     @Override
     public int createPetition(PetitionDTO petitionDTO) throws Exception {
 
+
+        List<Appointment> appointments = appointmentRepo.findAllByPatientCode(petitionDTO.patientCode());
+        int count = 0;
+        for (Appointment item : appointments) {
+            count += item.getPetitionList().isEmpty() ? 0 : item.getPetitionList().size();
+            if (count >= 3) {
+                throw new MaxNumPQRSException("You have exceeded the maximum number of petitions");
+            }
+        }
+
+
         Optional<Appointment> optional = appointmentRepo.findById(petitionDTO.codeAppointment());
 
         if (optional.isEmpty()) {
@@ -567,8 +579,10 @@ public class PatientServicesImpl implements PatientServices {
 
         petition.getMessageList().add(message);
 
+        messageRepo.save(message);
+        petitionRepo.save(petition);
 
-        EmailDTO emailDTO = new EmailDTO(a.getEmail(), "se genero un reporte", "se ha generado una nueva solicitud");
+        EmailDTO emailDTO = new EmailDTO(a.getEmail(), "A new request has been generated", message.getMessage());
 
         emailServices.sendEmail(emailDTO);
 
@@ -581,14 +595,14 @@ public class PatientServicesImpl implements PatientServices {
 
         List<Appointment> appointments = appointmentRepo.findAllByPatientCode(code);
 
-        if (appointments.isEmpty()){
-            throw new AppointmentsNotFoundException("There are not appointments associated with the patient code "+
+        if (appointments.isEmpty()) {
+            throw new AppointmentsNotFoundException("There are not appointments associated with the patient code " +
                     code);
         }
 
         List<Attention> attentions = new ArrayList<>();
 
-        for (Appointment item:appointments) {
+        for (Appointment item : appointments) {
             attentions.add(item.getAttention());
         }
 
@@ -596,30 +610,31 @@ public class PatientServicesImpl implements PatientServices {
 
     }
 
-    private List<Appointment>getAppointmentsPatient(int code) throws AppointmentsNotFoundException {
+    private List<Appointment> getAppointmentsPatient(int code) throws AppointmentsNotFoundException {
         List<Appointment> appointments = appointmentRepo.findAllByPatientCode(code);
-        if (appointments.isEmpty()){
-            throw new AppointmentsNotFoundException("There are not appointments associated with the patient code "+
+        if (appointments.isEmpty()) {
+            throw new AppointmentsNotFoundException("There are not appointments associated with the patient code " +
                     code);
         }
         return appointments;
     }
 
     @Override
-    public List<AppointmentDTO> listAppointmentByDoctor(int code, int doctorId) throws AppointmentsNotFoundException {
+    public List<AppointmentDTO> listAppointmentByDoctor(int code, int doctorId) throws
+            AppointmentsNotFoundException {
 
         List<Appointment> appointments = getAppointmentsPatient(code);
 
-        List<Appointment> appointmentsDTO=new ArrayList<>();
+        List<Appointment> appointmentsDTO = new ArrayList<>();
 
-        for (Appointment item:appointments) {
-            if (item.getDoctor().getIdentification()==doctorId){
+        for (Appointment item : appointments) {
+            if (item.getDoctor().getIdentification() == doctorId) {
                 appointmentsDTO.add(item);
             }
         }
 
-        if (appointmentsDTO.isEmpty()){
-            throw new AppointmentsNotFoundException("There are not appointments with the doctor identification: "+
+        if (appointmentsDTO.isEmpty()) {
+            throw new AppointmentsNotFoundException("There are not appointments with the doctor identification: " +
                     doctorId);
         }
 
@@ -629,32 +644,112 @@ public class PatientServicesImpl implements PatientServices {
 
     @Override
     public List<AppointmentDTO> listAppointmentByDate(int patientCode, LocalDate date)
-            throws  AppointmentsNotFoundException{
+            throws AppointmentsNotFoundException {
 
         List<Appointment> appointments = getAppointmentsPatient(patientCode);
 
-        for (Appointment item: appointments) {
-            LocalDate localDate = LocalDate.of(item.getAppointmentDate().getYear(),
+        for (Appointment item : appointments) {
+            LocalDate itemDate = LocalDate.of(item.getAppointmentDate().getYear(),
                     item.getAppointmentDate().getMonth(),
                     item.getAppointmentDate().getDayOfMonth());
 
-            if (!localDate.equals(date)){
+            if (!itemDate.equals(date)) {
                 appointments.remove(item);
             }
+            if (appointments.isEmpty()){
+                break;
+            }
         }
-        if (appointments.isEmpty()){
-            throw new AppointmentsNotFoundException("There are not appointments with the date that you put: "+date);
+        if (appointments.isEmpty()) {
+            throw new AppointmentsNotFoundException("There are not appointments with the date that you put: " + date);
         }
 
         return convertAppointmentsDTO(appointments);
     }
 
+    @Override
+    public List<PetitionMessagedDTO> listPetitionByPatient(int patientCode) throws Exception {
+
+        List<Appointment> appointments = getAppointmentsPatient(patientCode);
+
+        List<Petition> petitions = new ArrayList<>();
+
+        for (Appointment item : appointments) {
+            if (item.getPetitionList().isEmpty()) {
+                throw new Exception("There are not petitions associated with the patient code: " + patientCode);
+            }
+            petitions.addAll(item.getPetitionList());
+        }
+
+        if (petitions.isEmpty()) {
+            throw new Exception("There are not petitions associated with the patient code: " + patientCode);
+        }
+
+        return convertPetitionsMessageDTO(petitions);
+
+    }
+
+    @Override
+    public int answerPetitionPatient(AnswerPetitionDTO answerPetitionDTO) throws Exception {
+
+        Optional<Petition> optional = petitionRepo.findById(answerPetitionDTO.petitionCode());
+
+        if (optional.isEmpty()) {
+            throw new Exception("The petition with the code: " + answerPetitionDTO.petitionCode() + " was not found");
+        }
+
+        Petition petition = optional.get();
+        Optional<Account> optionalAccount = accountRepo.findById(answerPetitionDTO.patientCode());
+
+        if (optionalAccount.isEmpty()){
+            throw new Exception("The account with the code: " + answerPetitionDTO.patientCode() + " was not found");
+        }
+        Account  account = optionalAccount.get();
+        Message message = new Message();
+
+        message.setCreatedDate(LocalDateTime.now());
+
+        message.setMessage(answerPetitionDTO.message());
+
+        message.setAccount(account);
+
+        petition.getMessageList().add(message);
+
+        messageRepo.save(message);
+        petitionRepo.save(petition);
+
+        EmailDTO emailDTO = new EmailDTO(account.getEmail(), "New message", message.getMessage());
+
+        emailServices.sendEmail(emailDTO);
+
+        return petition.getCode();
+
+    }
+
+    private List<PetitionMessagedDTO> convertPetitionsMessageDTO(List<Petition> petitions) {
+
+        List<PetitionMessagedDTO> petitionDTOS = new ArrayList<>();
+
+        for (Petition item : petitions) {
+            petitionDTOS.add(new PetitionMessagedDTO(
+                    item.getAppointment().getCode(),
+                    item.getReason(),
+                    item.getTypePetition(),
+                    item.getAppointment().getPatient().getCode(),
+                    item.getMessageList()
+            ));
+        }
+
+        return petitionDTOS;
+    }
+
+
     private List<AppointmentDTO> convertAppointmentsDTO(List<Appointment> appointmentsDTO) {
-        List<AppointmentDTO>answer=new ArrayList<>();
-        for (Appointment item: appointmentsDTO) {
+        List<AppointmentDTO> answer = new ArrayList<>();
+        for (Appointment item : appointmentsDTO) {
             answer.add(new AppointmentDTO(
-              item.getCode(),
-              item.getAppointmentDate(),
+                    item.getCode(),
+                    item.getAppointmentDate(),
                     item.getDoctor().getName(),
                     item.getDoctor().getSpecialization()
             ));
@@ -666,14 +761,14 @@ public class PatientServicesImpl implements PatientServices {
     private List<ItemAttentionDTO> convertAttentionDTO(List<Attention> attentions) {
         List<ItemAttentionDTO> itemAttentionDTOS = new ArrayList<>();
 
-        for (Attention item: attentions) {
+        for (Attention item : attentions) {
             itemAttentionDTOS.add(new ItemAttentionDTO(
-                    item.getCode(),
-                    item.getDiagnosis(),
-                    item.getTreatment(),
-                    item.getMedicalNotes(),
-                    item.getAppointment().getCode(),
-                    item.getAppointment().getAppointmentState()
+                            item.getCode(),
+                            item.getDiagnosis(),
+                            item.getTreatment(),
+                            item.getMedicalNotes(),
+                            item.getAppointment().getCode(),
+                            item.getAppointment().getAppointmentState()
                     )
             );
         }
@@ -685,8 +780,6 @@ public class PatientServicesImpl implements PatientServices {
     private boolean validateAssociatedAppointment(int code) {
         return attentionRepo.findByAppointmentCode(code) != null;
     }
-
-
 
 
 }
