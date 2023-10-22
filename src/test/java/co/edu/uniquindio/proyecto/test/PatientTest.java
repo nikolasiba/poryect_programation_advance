@@ -30,6 +30,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -275,6 +276,37 @@ public class PatientTest {
             throw new RuntimeException(e);
         }
 
+    }
+
+    @Test
+    public void listAttention() {
+        List<ItemAttentionDTO> itemAttentionDTOList = new ArrayList<>();
+        try {
+            itemAttentionDTOList = patientServices.listAttention(2);
+            System.out.print("\n" + itemAttentionDTOList.get(0).toString() + "\n");
+        } catch (AppointmentsNotFoundException e) {
+            System.out.print("\n " + "se genero esta excepcion" + e.toString() + "\n");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @Test
+    public void listAppointmentByDoctor() {
+        List<AppointmentDTO> appointmentList = new ArrayList<>();
+        try {
+            appointmentList = patientServices.listAppointmentByDoctor(2, 11223);
+            if (appointmentList.isEmpty()) {
+                throw new AppointmentsNotFoundException("no se encontraron citas");
+            }
+            System.out.print("\n" + appointmentList.get(0).toString() + "\n");
+
+        } catch (AppointmentsNotFoundException e) {
+            System.out.print(e.toString());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

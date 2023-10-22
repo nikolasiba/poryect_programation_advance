@@ -36,9 +36,7 @@ public class DoctorServicesImpl implements DoctorServices {
     @Override
     public List<AppointmentDocDTO> listAppointment(int docCode) throws Exception {
 
-        List<AppointmentDocDTO> answer= getAppointmentsDoc(docCode);
-
-        return answer;
+        return getAppointmentsDoc(docCode);
 
     }
 
