@@ -575,9 +575,84 @@ public class PatientServicesImpl implements PatientServices {
 
     }
 
+    @Override
+    public List<ItemAttentionDTO> listAttention(int code) throws AppointmentsNotFoundException {
+
+        List<Appointment> appointments = appointmentRepo.findAllByPatientCode(code);
+
+        if (appointments.isEmpty()){
+            throw new AppointmentsNotFoundException("There are not appointments associated with the patient code "+
+                    code);
+        }
+
+        List<Attention> attentions = new ArrayList<>();
+
+        for (Appointment item:appointments) {
+            attentions.add(item.getAttention());
+        }
+
+        return convertAttentionDTO(attentions);
+
+    }
+
+    @Override
+    public List<AppointmentDTO> listAppointmentByDoctor(int code, int doctorId) throws AppointmentsNotFoundException {
+
+        List<Appointment> appointments = appointmentRepo.findAllByPatientCode(code);
+        if (appointments.isEmpty()){
+            throw new AppointmentsNotFoundException("There are not appointments associated with the patient code "+
+                    code);
+        }
+
+        List<Appointment> appointmentsDTO=new ArrayList<>();
+
+        for (Appointment item:appointments) {
+            if (item.getDoctor().getIdentification()==doctorId){
+                appointmentsDTO.add(item);
+            }
+        }
+
+        return convertAppointmentsDTO(appointmentsDTO);
+
+    }
+
+    private List<AppointmentDTO> convertAppointmentsDTO(List<Appointment> appointmentsDTO) {
+        List<AppointmentDTO>answer=new ArrayList<>();
+        for (Appointment item: appointmentsDTO) {
+            answer.add(new AppointmentDTO(
+              item.getCode(),
+              item.getAppointmentDate(),
+                    item.getDoctor().getName(),
+                    item.getDoctor().getSpecialization()
+            ));
+        }
+        return answer;
+
+    }
+
+    private List<ItemAttentionDTO> convertAttentionDTO(List<Attention> attentions) {
+        List<ItemAttentionDTO> itemAttentionDTOS = new ArrayList<>();
+
+        for (Attention item: attentions) {
+            itemAttentionDTOS.add(new ItemAttentionDTO(
+                    item.getCode(),
+                    item.getDiagnosis(),
+                    item.getTreatment(),
+                    item.getMedicalNotes(),
+                    item.getAppointment().getCode(),
+                    item.getAppointment().getAppointmentState()
+                    )
+            );
+        }
+        return itemAttentionDTOS;
+
+    }
+
     private boolean validateAssociatedAppointment(int code) {
         return attentionRepo.findByAppointmentCode(code) != null;
     }
+
+
 
 
 }

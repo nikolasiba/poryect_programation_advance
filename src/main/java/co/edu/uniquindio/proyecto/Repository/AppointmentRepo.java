@@ -18,8 +18,4 @@ public interface AppointmentRepo extends JpaRepository<Appointment,Integer> {
     List<Appointment>findAllByDoctorCode(int code);
 
 
-
-
-
-
 }

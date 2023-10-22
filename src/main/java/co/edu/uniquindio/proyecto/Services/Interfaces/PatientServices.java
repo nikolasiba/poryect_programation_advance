@@ -39,4 +39,8 @@ public interface PatientServices {
     ItemAttentionDTO showDetailsAppointment(int code)
             throws AppointmentNotFoundException, AttentionNotFoundException;
     int createPetition(PetitionDTO petitionDTO) throws Exception;
+    List<ItemAttentionDTO> listAttention(int code) throws AppointmentsNotFoundException;
+    List<AppointmentDTO>listAppointmentByDoctor(int patientCode, int doctorId ) throws AppointmentsNotFoundException;
+
+
 }
