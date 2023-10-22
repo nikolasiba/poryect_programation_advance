@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface ScheduleRepo extends JpaRepository<Schedule, Integer> {
     List<Schedule> findAllByDoctorCode(int code);
+    Schedule findByDoctorCode(int code);
 
 }

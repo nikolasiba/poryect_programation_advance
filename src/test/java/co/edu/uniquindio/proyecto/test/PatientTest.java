@@ -181,7 +181,7 @@ public class PatientTest {
         ItemAppointmentPatientDTO itemAppointmentPatientDTO = new ItemAppointmentPatientDTO(
                 2,
                 4,
-                LocalDateTime.now(),
+                1,
                 "hola"
 
         );

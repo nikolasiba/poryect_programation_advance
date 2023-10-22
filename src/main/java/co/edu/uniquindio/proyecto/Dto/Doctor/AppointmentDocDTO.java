@@ -5,6 +5,8 @@ import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+import java.time.LocalDateTime;
+
 public record AppointmentDocDTO(
         @Positive
         int codeAppointment,
@@ -13,6 +15,8 @@ public record AppointmentDocDTO(
         @Column(length = 30, nullable = false)
         String patientName,
         @Positive
-        int patientId
+        int patientId,
+        @NotNull
+        LocalDateTime localDateTime
 ) {
 }

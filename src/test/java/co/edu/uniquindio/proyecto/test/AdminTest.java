@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class AdminTest {
     public void createDoctorTest(){
 
         List<ScheduleDTO> schedules = new ArrayList<>();
-        schedules.add( new ScheduleDTO("LUNES",
+        schedules.add( new ScheduleDTO(LocalDate.of(2023, 10, 21),
                 LocalTime.of(7, 0, 0),
                 LocalTime.of(14, 0, 0) ) );
 
