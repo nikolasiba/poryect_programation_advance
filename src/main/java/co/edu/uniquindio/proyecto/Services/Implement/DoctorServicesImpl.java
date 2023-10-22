@@ -111,15 +111,19 @@ public class DoctorServicesImpl implements DoctorServices {
         List<Appointment> appointments = getAppointmentByDoctor(docCode);
 
         LocalTime time = LocalTime.of(23, 59);
-        LocalDateTime localDateTime = LocalDateTime.now().minusDays(1).with(time);
-        LocalDateTime localDateTime2 = LocalDateTime.now().plusDays(1).with(time);
+        LocalTime time2 = LocalTime.of(0, 0);
+        LocalDateTime yesterday = LocalDateTime.now().minusDays(1).with(time);
+        LocalDateTime today = LocalDateTime.now().plusDays(1).with(time2);
 
 
-        appointments.removeIf(item -> !item.getAppointmentDate().isAfter(localDateTime) && !item.getAppointmentDate().isBefore(localDateTime2));
-
+        appointments.removeIf(item -> item.getAppointmentDate().isBefore(yesterday) || item.getAppointmentDate().isAfter(today));
+        if (appointments.isEmpty()) {
+            throw new AppointmentsNotFoundException("Not appointments with the doctor code: " + docCode);
+        }
         return convertDTOS(appointments);
 
     }
+
 
     private List<Appointment> getAppointmentByDoctor(int code) throws AppointmentsNotFoundException {
 
@@ -141,7 +145,7 @@ public class DoctorServicesImpl implements DoctorServices {
         LocalTime time = LocalTime.of(23, 59);
         LocalDateTime localDateTime = LocalDateTime.now().with(time);
 
-        appointments.removeIf(item -> !item.getAppointmentDate().isBefore(localDateTime));
+        appointments.removeIf(item -> item.getAppointmentDate().isBefore(localDateTime));
 
         return convertDTOS(appointments);
 

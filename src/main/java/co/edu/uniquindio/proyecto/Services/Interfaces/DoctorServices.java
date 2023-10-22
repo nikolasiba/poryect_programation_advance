@@ -16,13 +16,20 @@ import java.util.List;
 
 public interface DoctorServices {
 
-    List<AppointmentDocDTO>listAppointment(int docCode) throws Exception;
-    List<AppointmentDocDTO>listPendingAppointments(int docCode, AppointmentState appointmentState) throws Exception;
-    List<ScheduleDTO> listSchedules (int docCode) throws Exception;
-    List<AppointmentDocDTO>listFinishedAndCancelledAppointments(int docCode) throws AppointmentsNotFoundException;
-    List<AppointmentDocDTO>listAppointmentsActualDay(int docCode) throws AppointmentsNotFoundException;
-    List<AppointmentDocDTO>listFutureAppointments(int docCode) throws AppointmentsNotFoundException;
+    List<AppointmentDocDTO> listAppointment(int docCode) throws Exception;
+
+    List<AppointmentDocDTO> listPendingAppointments(int docCode, AppointmentState appointmentState) throws Exception;
+
+    List<AppointmentDocDTO> listFinishedAndCancelledAppointments(int docCode) throws AppointmentsNotFoundException;
+
+    List<ScheduleDTO> listSchedules(int docCode) throws Exception;
+
+    List<AppointmentDocDTO> listAppointmentsActualDay(int docCode) throws AppointmentsNotFoundException;
+
+    List<AppointmentDocDTO> listFutureAppointments(int docCode) throws AppointmentsNotFoundException;
+
     int attendAppointment(AppointmentAttentionDTO appointmentAttentionDTO) throws Exception;
+
     int assignDayOff(DayOffDTO dayOffDTO) throws AppointmentsNotFoundException, AppointmentHasAlreadyCreatedException, DoctorNotFoundException, DoctorHasAlreadyDayOffException;
 
 }

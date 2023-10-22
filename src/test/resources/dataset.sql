@@ -21,26 +21,26 @@ insert into doctor values ("ARMENIA", 11223, 'Juan', '14353415','url_picture',"A
 insert into doctor values ("BOGOTA", 2341, 'Jose', '234511','url_picture',"AVAILABLE", "OPHTHALMOLOGY",5);
 insert into doctor values ("CALI", 3241, 'luis', '23511432','url_picture',"AVAILABLE", "SURGERY",6);
 --
-insert into schedule values (1, '2023-12-31', '12:34:56.123456','8:34:56.123456',"AVAILABLE",4);
+insert into schedule values (1, '2023-12-31', '12:34:56.123456','8:34:0.0',"AVAILABLE",4);
 insert into schedule values (2, '2023-11-29', '10:34:56.123456','7:34:56.123456',"AVAILABLE",5);
 insert into schedule values (3, '2023-10-31', '15:34:56.123456','5:34:56.123456',"AVAILABLE",6);
 --
-insert into free_day values (1,'2023-12-31', 4 );
-insert into free_day values (2,'2023-12-31', 5 );
-insert into free_day values (3,'2023-12-31', 6 );
+insert into day_off values ('1','2023-12-31',"AVAILABLE" , 5 );
+insert into day_off values ('2','2023-12-31',"NOT_AVAILABLE", 5 );
+insert into day_off values ('3','2023-12-31',"AVAILABLE" ,6 );
 --
 -- insert into appointment values (1,'2023-12-01 13:34:56', "PENDING", '2023-10-19 09:34:56.123456',
 --                                 'I have something', 4, 1);
-insert into appointment values (2,'2023-11-01 14:34:56.123456', "PENDING", '2023-10-18 13:34:56.123456',
+insert into appointment values (2,'2023-10-21 14:34:56.123456', "PENDING", '2023-10-21 13:34:56.123456',
                                 'I have something', 4, 2);
 insert into appointment values (3,'2023-11-01 12:34:56.123456', "PENDING", '2023-10-17 05:34:56.123456',
                                 'I have something', 6, 3);
 --
--- insert into attention values (1, 'cancer', 'nothing', 'acetaminofen', 1 );
-insert into attention values (2, 'cancer', 'nothing', 'caldo de pescado', 2 );
-insert into attention values (3, 'cancer', 'nothing', 'acetaminofen x2', 3 );
---
--- insert into petition values (1,'2023-12-01 16:34:56.123456', "PENDING", 'XD', "CLAIMS", 1 );
+insert into attention values (1, 'cancer', 'nothing', 'acetaminofen', 2 );
+insert into attention values (2, 'cancer', 'nothing', 'caldo de pescado', 3);
+-- insert into attention values (3, 'cancer', 'nothing', 'acetaminofen x2', 3 );
+
+insert into petition values (1,'2023-12-01 16:34:56.123456', "PENDING", 'XD', "CLAIMS", 2 );
 -- insert into petition values (2,'2023-11-01 13:34:56.123456', "PENDING", 'the doctor is a  fool', "CLAIMS", 2 );
 -- insert into petition values (3,'2023-12-01 15:34:56.123456', "PENDING", 'what???', "CLAIMS", 3 );
 --
