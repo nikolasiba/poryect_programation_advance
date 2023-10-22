@@ -15,6 +15,6 @@ public interface DoctorServices {
     List<AppointmentDocDTO>listPendingAppointments(int docCode, AppointmentState appointmentState) throws Exception;
     List<ScheduleDTO> listSchedules (int docCode) throws Exception;
     List<AppointmentDocDTO>listFinishedAndCancelledAppointments(int docCode) throws AppointmentsNotFoundException;
-
+    List<AppointmentDocDTO>listAppointmentsActualDay(int docCode) throws AppointmentsNotFoundException;
 
 }

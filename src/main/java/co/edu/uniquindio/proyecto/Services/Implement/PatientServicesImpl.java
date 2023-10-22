@@ -29,6 +29,7 @@ import co.edu.uniquindio.proyecto.Services.Interfaces.PatientServices;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -595,14 +596,19 @@ public class PatientServicesImpl implements PatientServices {
 
     }
 
-    @Override
-    public List<AppointmentDTO> listAppointmentByDoctor(int code, int doctorId) throws AppointmentsNotFoundException {
-
+    private List<Appointment>getAppointmentsPatient(int code) throws AppointmentsNotFoundException {
         List<Appointment> appointments = appointmentRepo.findAllByPatientCode(code);
         if (appointments.isEmpty()){
             throw new AppointmentsNotFoundException("There are not appointments associated with the patient code "+
                     code);
         }
+        return appointments;
+    }
+
+    @Override
+    public List<AppointmentDTO> listAppointmentByDoctor(int code, int doctorId) throws AppointmentsNotFoundException {
+
+        List<Appointment> appointments = getAppointmentsPatient(code);
 
         List<Appointment> appointmentsDTO=new ArrayList<>();
 
@@ -612,8 +618,35 @@ public class PatientServicesImpl implements PatientServices {
             }
         }
 
+        if (appointmentsDTO.isEmpty()){
+            throw new AppointmentsNotFoundException("There are not appointments with the doctor identification: "+
+                    doctorId);
+        }
+
         return convertAppointmentsDTO(appointmentsDTO);
 
+    }
+
+    @Override
+    public List<AppointmentDTO> listAppointmentByDate(int patientCode, LocalDate date)
+            throws  AppointmentsNotFoundException{
+
+        List<Appointment> appointments = getAppointmentsPatient(patientCode);
+
+        for (Appointment item: appointments) {
+            LocalDate localDate = LocalDate.of(item.getAppointmentDate().getYear(),
+                    item.getAppointmentDate().getMonth(),
+                    item.getAppointmentDate().getDayOfMonth());
+
+            if (!localDate.equals(date)){
+                appointments.remove(item);
+            }
+        }
+        if (appointments.isEmpty()){
+            throw new AppointmentsNotFoundException("There are not appointments with the date that you put: "+date);
+        }
+
+        return convertAppointmentsDTO(appointments);
     }
 
     private List<AppointmentDTO> convertAppointmentsDTO(List<Appointment> appointmentsDTO) {
@@ -644,6 +677,7 @@ public class PatientServicesImpl implements PatientServices {
                     )
             );
         }
+
         return itemAttentionDTOS;
 
     }

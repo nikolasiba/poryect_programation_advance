@@ -20,6 +20,7 @@ import co.edu.uniquindio.proyecto.Model.Enum.AppointmentState;
 import co.edu.uniquindio.proyecto.Model.Enum.DoctorState;
 import co.edu.uniquindio.proyecto.Model.Enum.Specialization;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface PatientServices {
@@ -41,6 +42,7 @@ public interface PatientServices {
     int createPetition(PetitionDTO petitionDTO) throws Exception;
     List<ItemAttentionDTO> listAttention(int code) throws AppointmentsNotFoundException;
     List<AppointmentDTO>listAppointmentByDoctor(int patientCode, int doctorId ) throws AppointmentsNotFoundException;
+    List<AppointmentDTO>listAppointmentByDate(int patientCode, LocalDate date) throws Exception;
 
 
 }
