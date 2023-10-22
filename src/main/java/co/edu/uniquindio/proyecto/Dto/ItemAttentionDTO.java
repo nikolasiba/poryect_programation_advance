@@ -19,6 +19,7 @@ public record ItemAttentionDTO(
       @Lob
       @Column(length = 300)
       String medicalNotes,
+
       @Positive
       int codeAppointment,
       @NotNull

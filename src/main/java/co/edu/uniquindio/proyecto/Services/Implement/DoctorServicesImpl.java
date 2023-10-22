@@ -4,6 +4,7 @@ import co.edu.uniquindio.proyecto.Dto.Admin.ScheduleDTO;
 import co.edu.uniquindio.proyecto.Dto.AppointmentDTO;
 import co.edu.uniquindio.proyecto.Dto.Doctor.AppointmentDocDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.PatientDTO;
+import co.edu.uniquindio.proyecto.Exception.AppointmentException.AppointmentsNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.DoctorsNotFoundException;
 import co.edu.uniquindio.proyecto.Model.Appointment;
 import co.edu.uniquindio.proyecto.Model.Enum.AppointmentState;
@@ -54,6 +55,62 @@ public class DoctorServicesImpl implements DoctorServices {
 
         return answer;
 
+    }
+
+    @Override
+    public List<ScheduleDTO> listSchedules(int docCode) throws Exception {
+
+        List<Schedule> schedules = scheduleRepo.findAllByDoctorCode(docCode);
+
+        if (schedules.isEmpty()){
+            throw new Exception("There are not schedules associated with the doctor code: "+docCode);
+        }
+
+        List<ScheduleDTO>answer = new ArrayList<>();
+        for (Schedule item:schedules) {
+            answer.add(new ScheduleDTO(
+                    item.getDay(),
+                    item.getInitialTime(),
+                    item.getFinalTime()
+                    )
+            );
+        }
+
+        return answer;
+
+    }
+
+    @Override
+    public List<AppointmentDocDTO> listFinishedAndCancelledAppointments(int docCode)
+            throws AppointmentsNotFoundException {
+
+        List<Appointment>appointmentsDoc = appointmentRepo.findAllByDoctorCode(docCode);
+        if (appointmentsDoc.isEmpty()){
+            throw new AppointmentsNotFoundException("There are not appointments associated with the doctor code: "+
+                    docCode);
+        }
+
+        List<AppointmentDocDTO>answer=new ArrayList<>();
+
+        for (Appointment item:appointmentsDoc) {
+            if(item.getAppointmentState().equals(AppointmentState.FINISHED)||
+                    item.getAppointmentState().equals(AppointmentState.CANCELLED)){
+                answer.add(convertDTO(item));
+            }
+        }
+
+        return answer;
+
+    }
+
+    private AppointmentDocDTO convertDTO(Appointment item) {
+        return new AppointmentDocDTO(
+                item.getCode(),
+                item.getAppointmentState(),
+                item.getPatient().getName(),
+                item.getPatient().getIdentification(),
+                item.getAppointmentDate()
+        );
     }
 
     private List<AppointmentDocDTO> getAppointmentsDoc(int docCode) throws Exception {
