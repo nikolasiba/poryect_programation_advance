@@ -27,7 +27,7 @@ public class Doctor extends User implements Serializable {
     private DoctorState doctorState;
 
     @OneToMany(mappedBy = "doctor")
-    private List<FreeDay>freeDayList;
+    private List<DayOff>freeDayList;
 
     @OneToMany(mappedBy = "doctor")
     private List<Schedule>scheduleList;
