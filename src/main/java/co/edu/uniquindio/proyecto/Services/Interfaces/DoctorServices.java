@@ -6,9 +6,11 @@ import co.edu.uniquindio.proyecto.Dto.DayOffDTO;
 import co.edu.uniquindio.proyecto.Dto.Doctor.AppointmentDocDTO;
 import co.edu.uniquindio.proyecto.Exception.AppointmentException.AppointmentsNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.AppointmentHasAlreadyCreatedException;
+import co.edu.uniquindio.proyecto.Exception.AttentionNotAssociatedAppointmentException;
 import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.AppointmentNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.DoctorNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.DoctorHasAlreadyDayOffException;
+import co.edu.uniquindio.proyecto.Exception.PatientException.PatientNotFoundException;
 import co.edu.uniquindio.proyecto.Model.Attention;
 import co.edu.uniquindio.proyecto.Model.Enum.AppointmentState;
 
@@ -23,6 +25,9 @@ public interface DoctorServices {
     List<AppointmentDocDTO> listFinishedAndCancelledAppointments(int docCode) throws AppointmentsNotFoundException;
 
     List<ScheduleDTO> listSchedules(int docCode) throws Exception;
+
+    AppointmentAttentionDTO showDetailsAttention(AppointmentDocDTO appointmentDocDTO) throws PatientNotFoundException, AppointmentNotFoundException, AttentionNotAssociatedAppointmentException;
+    List<AppointmentDocDTO> showAppointmentHistoryPatient(int patientCode) throws AppointmentsNotFoundException;
 
     List<AppointmentDocDTO> listAppointmentsActualDay(int docCode) throws AppointmentsNotFoundException;
 

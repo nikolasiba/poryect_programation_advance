@@ -538,7 +538,6 @@ public class PatientServicesImpl implements PatientServices {
             }
         }
 
-
         Optional<Appointment> optional = appointmentRepo.findById(petitionDTO.codeAppointment());
 
         if (optional.isEmpty()) {

@@ -6,9 +6,11 @@ import co.edu.uniquindio.proyecto.Dto.DayOffDTO;
 import co.edu.uniquindio.proyecto.Dto.Doctor.AppointmentDocDTO;
 import co.edu.uniquindio.proyecto.Exception.AppointmentException.AppointmentsNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.AppointmentHasAlreadyCreatedException;
+import co.edu.uniquindio.proyecto.Exception.AttentionNotAssociatedAppointmentException;
 import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.AppointmentNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.DoctorNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.DoctorHasAlreadyDayOffException;
+import co.edu.uniquindio.proyecto.Exception.PatientException.PatientNotFoundException;
 import co.edu.uniquindio.proyecto.Model.*;
 import co.edu.uniquindio.proyecto.Model.Enum.AppointmentState;
 import co.edu.uniquindio.proyecto.Model.Enum.DayOffState;
@@ -80,6 +82,41 @@ public class DoctorServicesImpl implements DoctorServices {
 
         return answer;
 
+    }
+
+    @Override
+    public AppointmentAttentionDTO showDetailsAttention(AppointmentDocDTO appointmentDocDTO) throws PatientNotFoundException, AppointmentNotFoundException, AttentionNotAssociatedAppointmentException {
+
+        Optional<Appointment> optional = appointmentRepo.findById(appointmentDocDTO.codeAppointment());
+        if (optional.isEmpty()){
+            throw new AppointmentNotFoundException("There is no appointment associated with the appointment code: "+appointmentDocDTO.codeAppointment());
+        }
+        Appointment appointment = optional.get();
+
+        Attention attention = attentionRepo.findByAppointmentCode(appointment.getCode());
+        if (attention == null){
+            throw new AttentionNotAssociatedAppointmentException("There is not attention associated with the appointment code: "+appointment.getCode());
+        }
+
+        return new AppointmentAttentionDTO(
+                appointment.getCode(),
+                attention.getMedicalNotes(),
+                attention.getTreatment(),
+                attention.getDiagnosis()
+        );
+
+    }
+
+    @Override
+    public List<AppointmentDocDTO> showAppointmentHistoryPatient(int patientCode) throws AppointmentsNotFoundException {
+
+        List<Appointment>patientHistory= appointmentRepo.findAllByPatientCode(patientCode);
+
+        if (patientHistory.isEmpty()){
+            throw new AppointmentsNotFoundException("There is not appointments with the patient code: "+patientCode);
+        }
+
+        return convert(patientHistory);
     }
 
     @Override
