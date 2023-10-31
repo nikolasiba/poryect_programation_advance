@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyecto.Dto;
 
-public record MessageDto<T>(
+public record MessageDTO<T>(
         boolean error,
         T response
 ) {

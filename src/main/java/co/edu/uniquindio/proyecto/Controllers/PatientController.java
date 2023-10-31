@@ -1,15 +1,12 @@
 package co.edu.uniquindio.proyecto.Controllers;
 
-import co.edu.uniquindio.proyecto.Dto.AnswerPetitionDTO;
-import co.edu.uniquindio.proyecto.Dto.AppointmentDTO;
-import co.edu.uniquindio.proyecto.Dto.ItemAttentionDTO;
+import co.edu.uniquindio.proyecto.Dto.*;
 import co.edu.uniquindio.proyecto.Dto.Patient.EditedPatientDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.ItemAppointmentPatientDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.ItemPatientPwdDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.PatientDTO;
 import co.edu.uniquindio.proyecto.Dto.Petition.ItemDoctorPatientDTO;
 import co.edu.uniquindio.proyecto.Dto.Petition.PetitionDTO;
-import co.edu.uniquindio.proyecto.Dto.PetitionMessagedDTO;
 import co.edu.uniquindio.proyecto.Exception.AppointmentException.AppointmentsNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.AttentionNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.AppointmentNotFoundException;
@@ -18,9 +15,11 @@ import co.edu.uniquindio.proyecto.Exception.PatientException.PatientNotFoundExce
 import co.edu.uniquindio.proyecto.Model.Enum.AppointmentState;
 import co.edu.uniquindio.proyecto.Model.Enum.DoctorState;
 import co.edu.uniquindio.proyecto.Model.Enum.Specialization;
+import co.edu.uniquindio.proyecto.Model.Message;
 import co.edu.uniquindio.proyecto.Services.Interfaces.PatientServices;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -34,14 +33,17 @@ public class PatientController {
     private final PatientServices patientServices;
 
     @PostMapping("/sign-in")
-    public int sigIn(@Valid @RequestBody PatientDTO patientDTO) throws Exception {
-        return patientServices.sigIn(patientDTO);
-
+    public ResponseEntity<MessageDTO<Integer>> sigIn(@Valid @RequestBody PatientDTO patientDTO) throws Exception {
+        return ResponseEntity.ok().body(new MessageDTO<>(false, patientServices.sigIn(patientDTO)) ) ;
     }
 
     @PutMapping("/edit-account")
-    public int editAccount(@Valid @RequestBody EditedPatientDTO editedPatientDTO) throws PatientNotFoundException {
-        return patientServices.editAccount(editedPatientDTO);
+    public ResponseEntity<MessageDTO<String>> editAccount(@Valid @RequestBody EditedPatientDTO editedPatientDTO)
+            throws PatientNotFoundException {
+
+        patientServices.editAccount(editedPatientDTO);
+
+        return ResponseEntity.ok().body(new MessageDTO<>(false,"Patient was updated"));
     }
 
     @GetMapping("/get-patient-id/{identification}")
@@ -50,8 +52,9 @@ public class PatientController {
     }
 
     @PutMapping("/delete-account/{code}")
-    public void deleteAccount(@PathVariable int code) throws Exception {
+    public ResponseEntity<MessageDTO<String>> deleteAccount(@PathVariable int code) throws Exception {
         patientServices.deleteAccount(code);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, "Patient was deleted correctly"));
     }
 
     @PutMapping("/step1-change-pwd/{email}")
@@ -65,10 +68,11 @@ public class PatientController {
     }
 
     @GetMapping("/api/check-availability")
-    public List<ItemDoctorPatientDTO> checkAvailability(@Valid @RequestBody Specialization specialization,
+    public ResponseEntity<MessageDTO<List<ItemDoctorPatientDTO>>> checkAvailability(@Valid @RequestBody Specialization specialization,
                                                         @Valid @RequestBody DoctorState doctorState)
             throws DoctorsNotFoundException {
-        return patientServices.checkAvailability(specialization,doctorState);
+        patientServices.checkAvailability(specialization,doctorState);
+        return ResponseEntity.ok().body(new MessageDTO<>(false, patientServices.checkAvailability(specialization,doctorState)) );
     }
 
     @PostMapping("/create-appointment")
