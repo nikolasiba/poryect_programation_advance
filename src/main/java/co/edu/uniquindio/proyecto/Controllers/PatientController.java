@@ -27,6 +27,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
+
 @RequiredArgsConstructor
 @RequestMapping("/api/patient")
 public class PatientController {
@@ -35,6 +36,7 @@ public class PatientController {
     @PostMapping("/sign-in")
     public int sigIn(@Valid @RequestBody PatientDTO patientDTO) throws Exception {
         return patientServices.sigIn(patientDTO);
+
     }
 
     @PutMapping("/edit-account")
