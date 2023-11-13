@@ -7,7 +7,7 @@ import co.edu.uniquindio.proyecto.Model.Doctor;
 import co.edu.uniquindio.proyecto.Model.Patient;
 import co.edu.uniquindio.proyecto.Repository.AccountRepo;
 import co.edu.uniquindio.proyecto.Services.Interfaces.AuthenticationService;
-import co.edu.uniquindio.proyecto.utils.JWTUtils;
+import co.edu.uniquindio.proyecto.Utils.JWTUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

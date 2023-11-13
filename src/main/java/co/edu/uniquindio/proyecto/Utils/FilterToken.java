@@ -1,4 +1,4 @@
-package co.edu.uniquindio.proyecto.utils;
+package co.edu.uniquindio.proyecto.Utils;
 
 import co.edu.uniquindio.proyecto.Dto.MessageDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +33,7 @@ public class FilterToken implements Filter {
         try {
 
             if (
-                    requestURI.startsWith("/api/patient") ||
+//                    requestURI.startsWith("/api/patient") ||
                     requestURI.startsWith("/api/doctor") ||
                     requestURI.startsWith("/api/admin")) {
 
