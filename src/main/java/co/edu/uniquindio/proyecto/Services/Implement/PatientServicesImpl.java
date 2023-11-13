@@ -28,7 +28,6 @@ import co.edu.uniquindio.proyecto.Services.Interfaces.PatientServices;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

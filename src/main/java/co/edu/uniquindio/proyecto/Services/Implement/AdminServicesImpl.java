@@ -66,7 +66,7 @@ public class AdminServicesImpl implements AdminServices {
 
         Doctor newDoctor = doctorRepo.save(d);
 
-        System.out.println("\n esta es la contrasenaaaaaaaaaa " + d.getPassword() + "\n");
+        System.out.println("\n esta es la contrasena " + d.getPassword() + "\n");
         assignSchedules(newDoctor, doctorRecordDTO.schedules());
 
         return newDoctor.getCode();

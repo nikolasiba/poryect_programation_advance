@@ -15,7 +15,6 @@ import co.edu.uniquindio.proyecto.Exception.PatientException.PatientNotFoundExce
 import co.edu.uniquindio.proyecto.Model.Enum.AppointmentState;
 import co.edu.uniquindio.proyecto.Model.Enum.DoctorState;
 import co.edu.uniquindio.proyecto.Model.Enum.Specialization;
-import co.edu.uniquindio.proyecto.Model.Message;
 import co.edu.uniquindio.proyecto.Services.Interfaces.PatientServices;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,10 +31,6 @@ import java.util.List;
 public class PatientController {
     private final PatientServices patientServices;
 
-    @PostMapping("/sign-in")
-    public ResponseEntity<MessageDTO<Integer>> sigIn(@Valid @RequestBody PatientDTO patientDTO) throws Exception {
-        return ResponseEntity.ok().body(new MessageDTO<>(false, patientServices.sigIn(patientDTO)) ) ;
-    }
 
     @PutMapping("/edit-account")
     public ResponseEntity<MessageDTO<String>> editAccount(@Valid @RequestBody EditedPatientDTO editedPatientDTO)

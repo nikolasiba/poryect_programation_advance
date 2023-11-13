@@ -2,8 +2,8 @@ package co.edu.uniquindio.proyecto.Services.Interfaces;
 
 import co.edu.uniquindio.proyecto.Dto.Admin.DoctorDetailDTO;
 import co.edu.uniquindio.proyecto.Dto.Admin.DoctorRecordDTO;
-import co.edu.uniquindio.proyecto.Dto.Admin.ItemDoctorDTO;
 import co.edu.uniquindio.proyecto.Dto.Admin.ItemAppointmentAdminDTO;
+import co.edu.uniquindio.proyecto.Dto.Admin.ItemDoctorDTO;
 import co.edu.uniquindio.proyecto.Dto.Petition.ItemPetitionDTO;
 import co.edu.uniquindio.proyecto.Dto.Petition.PetitionDetailDTO;
 import co.edu.uniquindio.proyecto.Dto.Petition.RespLogDTO;
@@ -15,7 +15,6 @@ import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.DoctorWithIdRepeate
 import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.DoctorsNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.PetitionExceptions.PetitionNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.PetitionExceptions.PetitionsNotFoundException;
-import co.edu.uniquindio.proyecto.Model.Account;
 import co.edu.uniquindio.proyecto.Model.Enum.PetitionState;
 
 import java.util.List;
