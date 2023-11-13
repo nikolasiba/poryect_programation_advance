@@ -1,6 +1,5 @@
 package co.edu.uniquindio.proyecto.Dto;
 
-import co.edu.uniquindio.proyecto.Model.Attention;
 import jakarta.persistence.Column;
 import jakarta.persistence.Lob;
 import jakarta.validation.constraints.Positive;

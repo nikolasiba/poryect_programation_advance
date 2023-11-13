@@ -7,7 +7,7 @@ import co.edu.uniquindio.proyecto.Model.Doctor;
 import co.edu.uniquindio.proyecto.Model.Patient;
 import co.edu.uniquindio.proyecto.Repository.AccountRepo;
 import co.edu.uniquindio.proyecto.Services.Interfaces.AuthenticationService;
-import co.edu.uniquindio.proyecto.utils.JWTUtils;
+import co.edu.uniquindio.proyecto.Utils.JWTUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,13 +33,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         Optional<Account> optionalAccount = accountRepo.findByEmail(loginDTO.email());
         if (optionalAccount.isEmpty()) {
-            throw new Exception("No existe el correo ingresado");
+            throw new Exception("the email you entered does not exist");
         }
         Account account = optionalAccount.get();
 
         if (!passwordEncoder.matches(loginDTO.password(), account.getPassword())
         ) {
-            throw new Exception("La contraseña ingresada es incorrecta");
+            throw new Exception("the password that you entered was incorrect");
         }
         return new TokenDTO(createToke(account));
     }
@@ -51,11 +51,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             rol = "Patient";
             name = ((Patient) account).getName();
         } else if (account instanceof Doctor) {
-            rol = "medico";
+            rol = "Doctor";
             name = ((Doctor) account).getName();
         } else {
-            rol = "admin";
-            name = "Administrator";
+            rol = "Admin";
+            name = "Admin";
         }
         Map<String, Object> map = new HashMap<>();
         map.put("rol", rol);

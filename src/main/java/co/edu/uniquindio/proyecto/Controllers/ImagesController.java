@@ -5,10 +5,11 @@ import co.edu.uniquindio.proyecto.Dto.ImageDTO;
 import co.edu.uniquindio.proyecto.Dto.MessageDTO;
 import co.edu.uniquindio.proyecto.Services.Interfaces.ImageServices;
 import lombok.RequiredArgsConstructor;
-import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/images")

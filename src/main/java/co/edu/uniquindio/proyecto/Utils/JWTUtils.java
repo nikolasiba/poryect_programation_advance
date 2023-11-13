@@ -1,8 +1,9 @@
-package co.edu.uniquindio.proyecto.utils;
+package co.edu.uniquindio.proyecto.Utils;
 
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.time.Instant;

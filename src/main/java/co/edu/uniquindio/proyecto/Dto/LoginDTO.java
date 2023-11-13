@@ -10,5 +10,4 @@ public record LoginDTO(
         @NotNull
         String password) {
 
-
-}
+     }

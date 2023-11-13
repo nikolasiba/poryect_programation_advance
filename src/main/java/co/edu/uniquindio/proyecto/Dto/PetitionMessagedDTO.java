@@ -2,7 +2,6 @@ package co.edu.uniquindio.proyecto.Dto;
 
 import co.edu.uniquindio.proyecto.Model.Enum.TypePetition;
 import co.edu.uniquindio.proyecto.Model.Message;
-import jakarta.persistence.Column;
 import jakarta.persistence.Lob;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

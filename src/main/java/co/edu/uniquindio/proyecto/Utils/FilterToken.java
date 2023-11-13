@@ -1,4 +1,4 @@
-package co.edu.uniquindio.proyecto.utils;
+package co.edu.uniquindio.proyecto.Utils;
 
 import co.edu.uniquindio.proyecto.Dto.MessageDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;

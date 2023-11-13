@@ -6,14 +6,12 @@ import co.edu.uniquindio.proyecto.Dto.AppointmentDTO;
 import co.edu.uniquindio.proyecto.Dto.ItemAttentionDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.EditedPatientDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.ItemAppointmentPatientDTO;
-import co.edu.uniquindio.proyecto.Dto.Petition.ItemDoctorPatientDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.ItemPatientPwdDTO;
 import co.edu.uniquindio.proyecto.Dto.Patient.PatientDTO;
+import co.edu.uniquindio.proyecto.Dto.Petition.ItemDoctorPatientDTO;
 import co.edu.uniquindio.proyecto.Dto.Petition.PetitionDTO;
 import co.edu.uniquindio.proyecto.Dto.PetitionMessagedDTO;
-import co.edu.uniquindio.proyecto.Exception.AppointmentException.AccountNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.AppointmentException.AppointmentsNotFoundException;
-import co.edu.uniquindio.proyecto.Exception.AttentionNotAssociatedAppointmentException;
 import co.edu.uniquindio.proyecto.Exception.AttentionNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.AppointmentNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.DoctorsNotFoundException;
@@ -21,7 +19,6 @@ import co.edu.uniquindio.proyecto.Exception.PatientException.PatientNotFoundExce
 import co.edu.uniquindio.proyecto.Model.Enum.AppointmentState;
 import co.edu.uniquindio.proyecto.Model.Enum.DoctorState;
 import co.edu.uniquindio.proyecto.Model.Enum.Specialization;
-import co.edu.uniquindio.proyecto.Model.Petition;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -11,7 +11,6 @@ import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.AppointmentNotFound
 import co.edu.uniquindio.proyecto.Exception.DoctorExceptions.DoctorNotFoundException;
 import co.edu.uniquindio.proyecto.Exception.DoctorHasAlreadyDayOffException;
 import co.edu.uniquindio.proyecto.Exception.PatientException.PatientNotFoundException;
-import co.edu.uniquindio.proyecto.Model.Attention;
 import co.edu.uniquindio.proyecto.Model.Enum.AppointmentState;
 
 import java.util.List;
