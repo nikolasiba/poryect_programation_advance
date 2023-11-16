@@ -16,6 +16,7 @@ import co.edu.uniquindio.proyecto.Model.Enum.AppointmentState;
 import co.edu.uniquindio.proyecto.Model.Enum.DoctorState;
 import co.edu.uniquindio.proyecto.Model.Enum.Specialization;
 import co.edu.uniquindio.proyecto.Services.Interfaces.PatientServices;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/patient")
+@SecurityRequirement(name = "bearerAuth")
 public class PatientController {
     private final PatientServices patientServices;
 
@@ -125,6 +127,11 @@ public class PatientController {
     @PostMapping("/ansewer-petition-patient")
     public int answerPetitionPatient(@Valid @RequestBody AnswerPetitionDTO answerPetitionDTO) throws Exception {
         return patientServices.answerPetitionPatient(answerPetitionDTO);
+    }
+
+    @GetMapping("/get-patient-by-code/{code}")
+    public PatientDTO getPatient(@PathVariable int code) throws PatientNotFoundException {
+        return patientServices.getDataPatient(code);
     }
 
 }

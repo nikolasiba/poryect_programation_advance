@@ -64,4 +64,7 @@ public interface PatientServices {
     int answerPetitionPatient(AnswerPetitionDTO answerPetitionDTO) throws Exception;
 
 
+    PatientDTO getDataPatient(int code) throws PatientNotFoundException;
+
+
 }

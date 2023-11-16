@@ -26,6 +26,7 @@ import co.edu.uniquindio.proyecto.Services.Interfaces.AdminServices;
 import co.edu.uniquindio.proyecto.Services.Interfaces.EmailServices;
 import co.edu.uniquindio.proyecto.Services.Interfaces.PatientServices;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -53,6 +54,8 @@ public class PatientServicesImpl implements PatientServices {
 
     @Override
     public int sigIn(PatientDTO patientDTO) throws Exception {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
 
         if (validateRepeatedId(patientDTO.identification())) {
             throw new PatientWithIdRepeatedException("The patient with the id: " + patientDTO.identification() +
@@ -64,10 +67,12 @@ public class PatientServicesImpl implements PatientServices {
                     " has been created");
         }
 
+        String passEncode = passwordEncoder.encode(patientDTO.password());
+
         Patient patient = new Patient();
 
         patient.setEmail(patientDTO.email());
-        patient.setPassword(patientDTO.password());
+        patient.setPassword(passEncode);
 
         patient.setName(patientDTO.name());
         patient.setIdentification(patientDTO.identification());
@@ -86,6 +91,7 @@ public class PatientServicesImpl implements PatientServices {
         Patient newPatient = patientRepo.save(patient);
 
         Account a = accountRepo.findByCode(newPatient.getCode());
+
         accountRepo.save(a);
 
         EmailDTO emailDTO = new EmailDTO(
@@ -687,6 +693,8 @@ public class PatientServicesImpl implements PatientServices {
 
     }
 
+
+
     @Override
     public int answerPetitionPatient(AnswerPetitionDTO answerPetitionDTO) throws Exception {
 
@@ -722,6 +730,28 @@ public class PatientServicesImpl implements PatientServices {
 
         return petition.getCode();
 
+    }
+
+    @Override
+    public PatientDTO getDataPatient(int code) throws PatientNotFoundException {
+
+
+        Patient patient = getPatientByCode(code);
+
+        PatientDTO patientDTO = new PatientDTO(
+                patient.getName(),
+                patient.getIdentification(),
+                patient.getPhone(),
+                patient.getUrlPicture(),
+                patient.getCity(),
+                patient.getBirthday(),
+                patient.getAllergies(),
+                patient.getBloodType(),
+                patient.getEps(),
+                patient.getEmail(),
+                patient.getPassword()
+        );
+        return  patientDTO;
     }
 
     private List<PetitionMessagedDTO> convertPetitionsMessageDTO(List<Petition> petitions) {
@@ -778,6 +808,9 @@ public class PatientServicesImpl implements PatientServices {
     private boolean validateAssociatedAppointment(int code) {
         return attentionRepo.findByAppointmentCode(code) != null;
     }
+
+
+
 
 
 }
