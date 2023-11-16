@@ -42,7 +42,7 @@ public class FilterToken implements Filter {
                     Jws<Claims> jws = jwtUtils.parseJwt(token);
                     if (
                             (requestURI.startsWith("/api/patient") &&
-                                    !jws.getBody().get("rol").equals("patient")) ||
+                                    !jws.getBody().get("rol").equals("Patient")) ||
                             (requestURI.startsWith("/api/doctor") &&
                                             !jws.getBody().get("rol").equals("doctor")) ||
                             (requestURI.startsWith("api/admin") &&

@@ -31,7 +31,7 @@ public class AuthenticationController {
 
     }
 
-    @PostMapping("/sign-in")
+    @PostMapping("/sing-in")
     public ResponseEntity<MessageDTO<Integer>> sigIn(@Valid @RequestBody PatientDTO patientDTO) throws Exception {
         return ResponseEntity.ok().body(new MessageDTO<>(false, patientServices.sigIn(patientDTO)) ) ;
     }
