@@ -44,9 +44,9 @@ public class FilterToken implements Filter {
                             (requestURI.startsWith("/api/patient") &&
                                     !jws.getBody().get("rol").equals("Patient")) ||
                             (requestURI.startsWith("/api/doctor") &&
-                                            !jws.getBody().get("rol").equals("doctor")) ||
+                                            !jws.getBody().get("rol").equals("Doctor")) ||
                             (requestURI.startsWith("api/admin") &&
-                                            !jws.getBody().get("rol").equals("admin"))) {
+                                            !jws.getBody().get("rol").equals("Admin"))) {
 
                         createErrorAnswer("you don't have the permissions",
                                 HttpServletResponse.SC_FORBIDDEN, res);
