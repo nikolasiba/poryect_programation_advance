@@ -1,10 +1,7 @@
 package co.edu.uniquindio.proyecto.Services.Implement;
 
 import co.edu.uniquindio.proyecto.Dto.*;
-import co.edu.uniquindio.proyecto.Dto.Patient.EditedPatientDTO;
-import co.edu.uniquindio.proyecto.Dto.Patient.ItemAppointmentPatientDTO;
-import co.edu.uniquindio.proyecto.Dto.Patient.ItemPatientPwdDTO;
-import co.edu.uniquindio.proyecto.Dto.Patient.PatientDTO;
+import co.edu.uniquindio.proyecto.Dto.Patient.*;
 import co.edu.uniquindio.proyecto.Dto.Petition.ItemDoctorPatientDTO;
 import co.edu.uniquindio.proyecto.Dto.Petition.PetitionDTO;
 import co.edu.uniquindio.proyecto.Exception.AppointmentException.AccountNotFoundException;
@@ -211,6 +208,7 @@ public class PatientServicesImpl implements PatientServices {
 
     @Override
     public int changePassword(ItemPatientPwdDTO itemPatientPwdDTO) throws Exception {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         if (validatePatientEmail(itemPatientPwdDTO.email())) {
             throw new PatientNotFoundException("Patient with email " + itemPatientPwdDTO.email() + " does not exist");
@@ -221,8 +219,9 @@ public class PatientServicesImpl implements PatientServices {
         if (!itemPatientPwdDTO.repeatPassword().equals(itemPatientPwdDTO.password())) {
             throw new PwdNotMatchException("Passwords don´t match, please repeat it");
         }
+        String passEncode = passwordEncoder.encode(itemPatientPwdDTO.password());
 
-        patient.setPassword(itemPatientPwdDTO.password());
+        patient.setPassword(passEncode);
 
         Patient newPatient = patientRepo.save(patient);
 
@@ -240,7 +239,7 @@ public class PatientServicesImpl implements PatientServices {
 
 
     @Override
-    public List<ItemDoctorPatientDTO> checkAvailability(Specialization specialization, DoctorState doctorState)
+    public List<ScheduleDto> checkAvailability(Specialization specialization, DoctorState doctorState)
             throws DoctorsNotFoundException {
 
         List<Doctor> doctors = doctorRepo.findAllBySpecializationAndDoctorState(specialization, DoctorState.AVAILABLE);
@@ -250,13 +249,23 @@ public class PatientServicesImpl implements PatientServices {
                     " please do it later");
         }
 
-        List<ItemDoctorPatientDTO> answer = new ArrayList<>();
+        List<ScheduleDto> answer = new ArrayList<>();
 
         for (Doctor d : doctors) {
-            answer.add(new ItemDoctorPatientDTO(
-                    d.getIdentification(),
-                    d.getName(),
-                    d.getScheduleList()));
+            for (Schedule schedule : d.getScheduleList()) {
+                if (schedule.getScheduleState().equals(ScheduleState.AVAILABLE)) {
+                    answer.add(new ScheduleDto(
+                            schedule.getCode(),
+                            schedule.getDay(),
+                            schedule.getInitialTime(),
+                            schedule.getFinalTime(),
+                            schedule.getDoctor().getName(),
+                            schedule.getScheduleState(),
+                            schedule.getDoctor().getCode()
+                    ));
+                }
+            }
+
         }
 
         return answer;
@@ -660,7 +669,7 @@ public class PatientServicesImpl implements PatientServices {
             if (!itemDate.equals(date)) {
                 appointments.remove(item);
             }
-            if (appointments.isEmpty()){
+            if (appointments.isEmpty()) {
                 break;
             }
         }
@@ -694,7 +703,6 @@ public class PatientServicesImpl implements PatientServices {
     }
 
 
-
     @Override
     public int answerPetitionPatient(AnswerPetitionDTO answerPetitionDTO) throws Exception {
 
@@ -707,10 +715,10 @@ public class PatientServicesImpl implements PatientServices {
         Petition petition = optional.get();
         Optional<Account> optionalAccount = accountRepo.findById(answerPetitionDTO.patientCode());
 
-        if (optionalAccount.isEmpty()){
+        if (optionalAccount.isEmpty()) {
             throw new Exception("The account with the code: " + answerPetitionDTO.patientCode() + " was not found");
         }
-        Account  account = optionalAccount.get();
+        Account account = optionalAccount.get();
         Message message = new Message();
 
         message.setCreatedDate(LocalDateTime.now());
@@ -751,7 +759,7 @@ public class PatientServicesImpl implements PatientServices {
                 patient.getEmail(),
                 patient.getPassword()
         );
-        return  patientDTO;
+        return patientDTO;
     }
 
     private List<PetitionMessagedDTO> convertPetitionsMessageDTO(List<Petition> petitions) {
@@ -808,9 +816,6 @@ public class PatientServicesImpl implements PatientServices {
     private boolean validateAssociatedAppointment(int code) {
         return attentionRepo.findByAppointmentCode(code) != null;
     }
-
-
-
 
 
 }

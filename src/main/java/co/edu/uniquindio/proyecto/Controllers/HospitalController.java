@@ -19,20 +19,23 @@ public class HospitalController {
 
     private final HospitalServices hospitalServices;
 
-    @GetMapping("/get-listBLoodType")
-    public List<BloodType> listBLoodType(){
+    @GetMapping("/get-listBloodType")
+    public List<BloodType> listBloodType() {
         return hospitalServices.listBLoodType();
     }
+
     @GetMapping("/get-listCity")
-    public List<City> listCity(){
+    public List<City> listCity() {
         return hospitalServices.listCity();
     }
-    @GetMapping("/get-list")
-    public List<Eps> listEps(){
+
+    @GetMapping("/get-listEps")
+    public List<Eps> listEps() {
         return hospitalServices.listEps();
     }
-    @GetMapping
-    public List<Specialization> listSpecialization(){
+
+    @GetMapping("/get-listSpecialization")
+    public List<Specialization> listSpecialization() {
         return hospitalServices.listSpecialization();
     }
 
