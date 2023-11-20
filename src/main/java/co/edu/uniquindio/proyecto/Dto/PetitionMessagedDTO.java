@@ -1,5 +1,7 @@
 package co.edu.uniquindio.proyecto.Dto;
 
+import co.edu.uniquindio.proyecto.Model.Enum.PetitionState;
+import co.edu.uniquindio.proyecto.Model.Enum.Specialization;
 import co.edu.uniquindio.proyecto.Model.Enum.TypePetition;
 import co.edu.uniquindio.proyecto.Model.Message;
 import jakarta.persistence.Lob;
@@ -20,6 +22,8 @@ public record PetitionMessagedDTO(
         @Positive
         int patientCode,
         @NotNull
-        List<Message> message
+        List<Message> message,
+        Specialization specialization,
+        PetitionState petitionState
 ) {
 }

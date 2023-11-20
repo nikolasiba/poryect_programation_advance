@@ -698,10 +698,10 @@ public class PatientServicesImpl implements PatientServices {
         List<Petition> petitions = new ArrayList<>();
 
         for (Appointment item : appointments) {
-            if (item.getPetitionList().isEmpty()) {
-                throw new Exception("There are not petitions associated with the patient code: " + patientCode);
+            if (!item.getPetitionList().isEmpty()) {
+                petitions.addAll(item.getPetitionList());
+
             }
-            petitions.addAll(item.getPetitionList());
         }
 
         if (petitions.isEmpty()) {
@@ -839,7 +839,9 @@ public class PatientServicesImpl implements PatientServices {
                     item.getReason(),
                     item.getTypePetition(),
                     item.getAppointment().getPatient().getCode(),
-                    item.getMessageList()
+                    item.getMessageList(),
+                    item.getAppointment().getDoctor().getSpecialization(),
+                    item.getPetitionState()
             ));
         }
 
