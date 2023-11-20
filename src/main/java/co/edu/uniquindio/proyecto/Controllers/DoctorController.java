@@ -13,6 +13,7 @@ import co.edu.uniquindio.proyecto.Exception.DoctorHasAlreadyDayOffException;
 import co.edu.uniquindio.proyecto.Exception.PatientException.PatientNotFoundException;
 import co.edu.uniquindio.proyecto.Model.Enum.AppointmentState;
 import co.edu.uniquindio.proyecto.Services.Interfaces.DoctorServices;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,8 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/doctor")
+@SecurityRequirement(name = "bearerAuth")
+
 public class DoctorController {
 
     private final DoctorServices doctorServices;

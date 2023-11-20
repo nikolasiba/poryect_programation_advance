@@ -17,6 +17,7 @@ import co.edu.uniquindio.proyecto.Exception.PetitionExceptions.PetitionNotFoundE
 import co.edu.uniquindio.proyecto.Exception.PetitionExceptions.PetitionsNotFoundException;
 import co.edu.uniquindio.proyecto.Model.Enum.PetitionState;
 import co.edu.uniquindio.proyecto.Services.Interfaces.AdminServices;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,8 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin")
+@SecurityRequirement(name = "bearerAuth")
+
 public class AdminController {
 
     private final AdminServices adminServices;

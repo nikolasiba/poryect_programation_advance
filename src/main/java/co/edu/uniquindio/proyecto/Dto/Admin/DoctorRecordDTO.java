@@ -17,7 +17,8 @@ public record DoctorRecordDTO(
         @NotBlank
         @Column(length = 30, nullable = false)
         String name,
-        @NotBlank
+
+        @NotNull
         @Column(nullable = false, unique = true)
         int identification,
         @NotNull

@@ -21,9 +21,9 @@ insert into doctor values ("ARMENIA", 11223, 'Juan', '14353415','url_picture',"A
 insert into doctor values ("BOGOTA", 2341, 'Jose', '234511','url_picture',"AVAILABLE", "OPHTHALMOLOGY",5);
 insert into doctor values ("CALI", 3241, 'luis', '23511432','url_picture',"AVAILABLE", "SURGERY",6);
 --
-insert into schedule values (1, '2023-12-31', '12:34:56.123456','8:34:0.0',"AVAILABLE",4);
-insert into schedule values (2, '2023-11-29', '10:34:56.123456','7:34:56.123456',"AVAILABLE",5);
-insert into schedule values (3, '2023-10-31', '15:34:56.123456','5:34:56.123456',"AVAILABLE",6);
+insert into schedule values (1, '2023-12-31', '12:30:56.123456','1:00:0.0',"AVAILABLE",4);
+insert into schedule values (2, '2023-11-29', '10:30:56.123456','11:00:56.123456',"AVAILABLE",5);
+insert into schedule values (3, '2023-10-31', '15:30:56.123456','16:00:56.123456',"AVAILABLE",6);
 --
 insert into day_off values ('1','2023-12-31',"AVAILABLE" , 5 );
 insert into day_off values ('2','2023-12-31',"NOT_AVAILABLE", 5 );
