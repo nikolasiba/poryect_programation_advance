@@ -301,6 +301,7 @@ public class PatientServicesImpl implements PatientServices {
                     " does not exist");
         }
 
+
         Patient patient = getPatientByCode(itemAppointmentPatientDTO.patientCode());
         Doctor doctor = optionalDoctor.get();
 
@@ -330,28 +331,31 @@ public class PatientServicesImpl implements PatientServices {
 
         schedule.setScheduleState(ScheduleState.NOT_AVAILABLE);
         scheduleRepo.save(schedule);
+        try {
+            EmailDTO emailDTOpatient = new EmailDTO(
+                    patient.getEmail(),
+                    "Appointment Center Team",
+                    "Hi!\n You have created an appointment, with the doctor: " +
+                            doctor.getName() + ", the day " + appointment.getAppointmentDate() +
+                            " , it was created at: " + appointment.getCreatedDate() + " Hope you stay here, thank you"
+            );
 
-        EmailDTO emailDTOpatient = new EmailDTO(
-                patient.getEmail(),
-                "Appointment Center Team",
-                "Hi!\n You have created an appointment, with the doctor: " +
-                        doctor.getName() + ", the day " + appointment.getAppointmentDate() +
-                        " , it was created at: " + appointment.getCreatedDate() + " Hope you stay here, thank you"
-        );
+            emailServices.sendEmail(emailDTOpatient);
 
-        emailServices.sendEmail(emailDTOpatient);
+            EmailDTO emailDTOdoctor = new EmailDTO(
+                    doctor.getEmail(),
+                    "Appointment Center Team",
+                    "Hi!\n You have an appointment with the patient:" +
+                            patient.getName() + " the day " + appointment.getAppointmentDate() +
+                            "it was created at: " + appointment.getCreatedDate() + ". Have a good attention, see you soon"
 
-        EmailDTO emailDTOdoctor = new EmailDTO(
-                doctor.getEmail(),
-                "Appointment Center Team",
-                "Hi!\n You have an appointment with the patient:" +
-                        patient.getName() + " the day " + appointment.getAppointmentDate() +
-                        "it was created at: " + appointment.getCreatedDate() + ". Have a good attention, see you soon"
+            );
 
-        );
-
-        emailServices.sendEmail(emailDTOdoctor);
-
+            emailServices.sendEmail(emailDTOdoctor);
+        } catch (Exception e) {
+            System.out.println("Error al enviar el correo");
+            return convertAppointmentDTO(newAppointment.getCode());
+        }
         return convertAppointmentDTO(newAppointment.getCode());
 
     }
@@ -431,9 +435,15 @@ public class PatientServicesImpl implements PatientServices {
 
         Patient patient = optional.get();
 
-        int numberAppointments = patient.getAppointmentList().size();
+        int appoinments = 0;
+        for (Appointment a : patient.getAppointmentList()) {
+            if (a.getAppointmentState().equals(AppointmentState.PENDING)) {
+                appoinments++;
+            }
+        }
 
-        return numberAppointments <= 3;
+
+        return appoinments <= 3;
 
     }
 
@@ -447,7 +457,7 @@ public class PatientServicesImpl implements PatientServices {
 
         Appointment appointment = getAppointmentByCode(code);
 
-        if (validateNumAppointmentCanceled(code)) {
+        if (validateNumAppointmentCanceled(appointment.getPatient().getCode())) {
 
             penalizePatient(appointment.getPatient());
 
@@ -458,7 +468,7 @@ public class PatientServicesImpl implements PatientServices {
                     "Hi!\n Your Account was penalized because there are more than three canceled appointments"
             );
 
-            emailServices.sendEmail(emailDTO);
+            /*emailServices.sendEmail(emailDTO);*/
 
             throw new ReachedNumCancelAppointmentsException("The number of cancel appointment was reached");
 
@@ -760,6 +770,63 @@ public class PatientServicesImpl implements PatientServices {
                 patient.getPassword()
         );
         return patientDTO;
+    }
+
+    @Override
+    public List<PatientAppointmentDTO> getPatientSchedule(int patientCode) throws PatientNotFoundException {
+
+        Optional<Patient> optional = patientRepo.findById(patientCode);
+
+        if (optional.isEmpty()) {
+            throw new PatientNotFoundException("Patient with the code: " + patientCode + " was not found");
+        }
+        List<PatientAppointmentDTO> answer = new ArrayList<>();
+        Patient patient = optional.get();
+
+        for (Appointment item : patient.getAppointmentList()) {
+            if (item.getAppointmentState().equals(AppointmentState.PENDING)) {
+                answer.add(new PatientAppointmentDTO(
+                        item.getCode(),
+                        item.getAppointmentDate(),
+                        item.getAppointmentDate().toLocalTime(),
+                        item.getAppointmentDate().toLocalTime(),
+                        item.getPatient().getEps(),
+                        item.getDoctor().getSpecialization(),
+                        item.getDoctor().getName()
+                ));
+            }
+
+        }
+
+        return answer;
+
+    }
+
+    @Override
+    public List<HistoryAppointmentDTO> getPatientHistory(int patientCode) throws PatientNotFoundException {
+
+        List<HistoryAppointmentDTO> answer = new ArrayList<>();
+        Optional<Patient> optional = patientRepo.findById(patientCode);
+
+        if (optional.isEmpty()) {
+            throw new PatientNotFoundException("Patient with the code: " + patientCode + " was not found");
+        }
+
+        Patient patient = optional.get();
+
+        for (Appointment item : patient.getAppointmentList()) {
+            if (!item.getAppointmentState().equals(AppointmentState.PENDING)) {
+                answer.add(new HistoryAppointmentDTO(
+                        item.getCode(),
+                        item.getAppointmentDate(),
+                        item.getDoctor().getSpecialization(),
+                        item.getDoctor().getName(),
+                        item.getAppointmentState()
+                ));
+            }
+        }
+
+        return  answer;
     }
 
     private List<PetitionMessagedDTO> convertPetitionsMessageDTO(List<Petition> petitions) {

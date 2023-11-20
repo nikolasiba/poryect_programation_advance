@@ -25,7 +25,7 @@ import java.util.List;
 @RestController
 
 @RequiredArgsConstructor
-@RequestMapping("/api/patient")
+@RequestMapping("/api/patient" )
 @SecurityRequirement(name = "bearerAuth")
 public class PatientController {
     private final PatientServices patientServices;
@@ -127,6 +127,16 @@ public class PatientController {
     @GetMapping("/get-patient-by-code/{code}")
     public PatientDTO getPatient(@PathVariable int code) throws PatientNotFoundException {
         return patientServices.getDataPatient(code);
+    }
+
+    @GetMapping("/get-patient-schedule/{patientCode}")
+    public List<PatientAppointmentDTO> getPatientSchedule(@Valid  @PathVariable int patientCode) throws PatientNotFoundException {
+        return patientServices.getPatientSchedule(patientCode);
+    }
+
+    @GetMapping("/get-patient-history/{patientCode}")
+    public List<HistoryAppointmentDTO> getPatientHistory(@Valid @PathVariable int patientCode) throws PatientNotFoundException {
+        return patientServices.getPatientHistory(patientCode);
     }
 
 }
