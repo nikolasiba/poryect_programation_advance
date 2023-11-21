@@ -698,10 +698,10 @@ public class PatientServicesImpl implements PatientServices {
         List<Petition> petitions = new ArrayList<>();
 
         for (Appointment item : appointments) {
-            if (item.getPetitionList().isEmpty()) {
-                throw new Exception("There are not petitions associated with the patient code: " + patientCode);
+            if (!item.getPetitionList().isEmpty()) {
+                petitions.addAll(item.getPetitionList());
+
             }
-            petitions.addAll(item.getPetitionList());
         }
 
         if (petitions.isEmpty()) {
@@ -826,7 +826,36 @@ public class PatientServicesImpl implements PatientServices {
             }
         }
 
-        return  answer;
+        return answer;
+    }
+
+    @Override
+    public List<HistoryAppointmentDTO> getFinishedAppointment(int patientCode) throws PatientNotFoundException {
+
+        List<HistoryAppointmentDTO> answerList = new ArrayList<>();
+        Optional<Patient> optional = patientRepo.findById(patientCode);
+
+        if (optional.isEmpty()) {
+            throw new PatientNotFoundException("Patient with the code: " + patientCode + " was not found");
+        }
+
+        Patient patient = optional.get();
+
+        for (Appointment item : patient.getAppointmentList()) {
+
+            int count = item.getPetitionList().size();
+            if (item.getAppointmentState().equals(AppointmentState.FINISHED) && count < 1) {
+                answerList.add(new HistoryAppointmentDTO(
+                        item.getCode(),
+                        item.getAppointmentDate(),
+                        item.getDoctor().getSpecialization(),
+                        item.getDoctor().getName(),
+                        item.getAppointmentState()
+                ));
+            }
+        }
+
+        return answerList;
     }
 
     private List<PetitionMessagedDTO> convertPetitionsMessageDTO(List<Petition> petitions) {
@@ -839,7 +868,9 @@ public class PatientServicesImpl implements PatientServices {
                     item.getReason(),
                     item.getTypePetition(),
                     item.getAppointment().getPatient().getCode(),
-                    item.getMessageList()
+                    item.getMessageList(),
+                    item.getAppointment().getDoctor().getSpecialization(),
+                    item.getPetitionState()
             ));
         }
 

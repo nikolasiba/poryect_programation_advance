@@ -66,4 +66,6 @@ public interface PatientServices {
     List<PatientAppointmentDTO> getPatientSchedule(int patientCode) throws PatientNotFoundException;
 
     List<HistoryAppointmentDTO> getPatientHistory(int patientCode) throws PatientNotFoundException;
+
+    List<HistoryAppointmentDTO> getFinishedAppointment(int patientCode) throws PatientNotFoundException;
 }
