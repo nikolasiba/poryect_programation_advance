@@ -139,4 +139,9 @@ public class PatientController {
         return patientServices.getPatientHistory(patientCode);
     }
 
+    @GetMapping("/get-finished-appointment/{patientCode}")
+    public List<HistoryAppointmentDTO> getFinishedAppointment(@Valid  @PathVariable int patientCode) throws PatientNotFoundException {
+        return  patientServices.getFinishedAppointment(patientCode);
+    }
+
 }
